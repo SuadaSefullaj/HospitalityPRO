@@ -17,11 +17,18 @@ namespace HumanResourceProject.Models
         public string Surname { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
-        public byte[] PasswordHash { get; set; } = null!;
-        public byte[] PasswordSalt { get; set; } = null!;
         public DateTime Birth { get; set; }
         public string PhoneNumber { get; set; } = null!;
         public string Role { get; set; } = null!;
+
+
+        // The added ones
+        public byte[] PasswordHash { get; set; } = null!;
+        public byte[] PasswordSalt { get; set; } = null!;
+        public string RefreshToken { get; set; } = string.Empty;
+        public DateTime TokenCreated { get; set; }
+        public DateTime TokenExpires { get; set; }
+
 
         public virtual ICollection<Notification> NotificationReceiverClients { get; set; }
         public virtual ICollection<Notification> NotificationSenderClients { get; set; }
