@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace HumanResourceProject.Models
 {
@@ -23,7 +24,11 @@ namespace HumanResourceProject.Models
 
 
         // The added ones
+
+        [JsonIgnore]
         public byte[] PasswordHash { get; set; } = null!;
+
+        [JsonIgnore]
         public byte[] PasswordSalt { get; set; } = null!;
         public string RefreshToken { get; set; } = string.Empty;
         public DateTime TokenCreated { get; set; }

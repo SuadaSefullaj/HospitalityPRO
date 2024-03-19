@@ -1,7 +1,7 @@
 ﻿using Domain.ClientService;
 using DTO;
 using Entities.Models;
-using Helpers.Enumerations;
+using Helpers;
 using HumanResourceProject.Models;
 using LamarCodeGeneration.Frames;
 using Microsoft.AspNetCore.Authorization;
@@ -22,7 +22,7 @@ namespace HumanResourceProject.Controllers
     {
 
         public static Client client = new Client();
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration; //it's used to retrieve the token secret key from the configuration, which is then used to generate JWT tokens for authentication purposes.
         private readonly IClientService _clientService;
 
         public AuthController(IConfiguration configuration, IClientService clientService)
@@ -45,8 +45,8 @@ namespace HumanResourceProject.Controllers
 
             client.Name = request.Name;
             client.Surname = request.Surname;
-            client.Password = request.Password;
             client.Email = request.Email;
+            client.Password = request.Password;
             client.PasswordHash = passwordHash;
             client.PasswordSalt = passwordSalt;
             client.PhoneNumber = request.PhoneNumber;
@@ -135,7 +135,7 @@ namespace HumanResourceProject.Controllers
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value));
+                _configuration.GetSection("AppSettings:Token").Value)); //Retrieves the secret key from the application settings. This key is used to sign the JWT.
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
@@ -148,7 +148,6 @@ namespace HumanResourceProject.Controllers
 
             return jwt;
         }
-
 
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
