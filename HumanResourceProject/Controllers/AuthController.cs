@@ -31,7 +31,7 @@ namespace HumanResourceProject.Controllers
             _clientService = clientService;
         }
 
-        [HttpGet, Authorize]
+        [HttpGet, Authorize(Roles ="Admin")]
         public ActionResult<string> GetMe()
         {
             var Email = _clientService.GetMyName();
@@ -53,6 +53,33 @@ namespace HumanResourceProject.Controllers
 
             return Ok(client);
         }
+
+
+
+        [HttpPost("register-admin"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult<Client>> RegisterAdmin(ClientRegistrationDTO request)
+        {
+            // Check if the current user is an admin
+            var currentUser = HttpContext.User;
+            if (currentUser == null || !currentUser.IsInRole("Admin"))
+            {
+                return Forbid(); // User is not authorized to register an admin
+            }
+
+            // Mock registration for admin (without updating the database)
+            var admin = new Client
+            {
+                Name = request.Name,
+                Surname = request.Surname,
+                Email = request.Email,
+                PhoneNumber = request.PhoneNumber,
+               Role="Admin"
+            };
+
+            // Return the mocked admin data
+            return Ok(admin);
+        }
+
 
 
 
@@ -131,7 +158,7 @@ namespace HumanResourceProject.Controllers
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, client.Email),
-                new Claim(ClaimTypes.Role, "Admin")
+                new Claim(ClaimTypes.Role, client.Role)
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(

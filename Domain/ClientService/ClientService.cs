@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HumanResourceProject.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using StructureMap;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +13,13 @@ namespace Domain.ClientService
 {
     public class ClientService : IClientService
     {
+
+        private readonly HospitalityPRO_DbContext _dbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public ClientService(IHttpContextAccessor httpContextAccessor)
+        public ClientService(IHttpContextAccessor httpContextAccessor, HospitalityPRO_DbContext dbContext)
         {
             _httpContextAccessor = httpContextAccessor;
+            _dbContext = dbContext;
         }
         public string GetMyName()
         {
@@ -25,4 +31,6 @@ namespace Domain.ClientService
             return result;
         }
     }
+
+  
 }

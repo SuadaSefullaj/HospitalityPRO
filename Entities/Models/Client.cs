@@ -20,7 +20,7 @@ namespace HumanResourceProject.Models
         public string Password { get; set; } = null!;
         public DateTime Birth { get; set; }
         public string PhoneNumber { get; set; } = null!;
-        public string Role { get; set; } = null!;
+        public string Role { get; set; } = "client";
 
 
         // The added ones
