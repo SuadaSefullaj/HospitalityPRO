@@ -40,10 +40,13 @@ namespace HumanResourceProject.Controllers
             return Ok(Email);
         }
 
+
+        //----------------------------------------------------------------------REGISTER---------------------------------------------------------------------------------
+
         [HttpPost("register")]
         public async Task<ActionResult<Client>> Register(ClientRegistrationDTO request)
         {
-            // Perform input validation
+            // Input validation
             if (string.IsNullOrWhiteSpace(request.Password))
             {
                 return BadRequest("Password is required.");
@@ -55,7 +58,7 @@ namespace HumanResourceProject.Controllers
             return Ok(client); //or token Im not sure
         }
 
-        //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------END-----------------------------------------------------------------------------------------------------
 
         [HttpPost("register-admin"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<Client>> RegisterAdmin(ClientRegistrationDTO request)
@@ -84,11 +87,13 @@ namespace HumanResourceProject.Controllers
 
 
 
+        //----------------------------------------------------------------------LOGIN---------------------------------------------------------------------------------
+
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(ClientLoginDTO request)
         {
 
-            // Authenticate client
+            // Authenticated client
             var client = await _clientService.AuthenticateClientAsync(request.Email, request.Password);
 
             if (client == null)
@@ -125,13 +130,10 @@ namespace HumanResourceProject.Controllers
                 return Unauthorized("Token expired.");
             }
 
-            // Generate new access token
             string token = _tokenService.CreateToken(client);
 
-            // Generate new refresh token
             var newRefreshToken = _tokenService.GenerateRefreshToken();
 
-            // Set new refresh token
             _tokenService.SetRefreshToken(HttpContext, client, newRefreshToken);
 
             return Ok(token);

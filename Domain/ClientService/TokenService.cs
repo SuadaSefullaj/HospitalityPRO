@@ -66,7 +66,6 @@ namespace Domain.ClientService
             };
             httpContext.Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
 
-            // Assuming Client class has properties for RefreshToken, TokenCreated, and TokenExpires
             client.RefreshToken = newRefreshToken.Token;
             client.TokenCreated = newRefreshToken.Created;
             client.TokenExpires = newRefreshToken.Expires;

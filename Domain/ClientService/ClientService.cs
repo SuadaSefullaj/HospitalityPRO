@@ -36,7 +36,7 @@ namespace Domain.ClientService
         }
 
 
-        //------------------------------------------------------------------------------REGISTER CLIENT------------------------------------------------------------------------
+        //------------------------------------------------------------------------------REGISTER CLIENT-----------------------------------------------------------------------------
         public async Task<Client> RegisterClientAsync(ClientRegistrationDTO request)
         {
 
@@ -61,6 +61,31 @@ namespace Domain.ClientService
 
             return client;
         }
+    //------------------------------------------------------------------------------------LOGIN--------------------------------------------------------------------------------
+
+        public async Task<Client> AuthenticateClientAsync(string email, string password)
+        {
+            // Retrieve client from database by email
+            var client = await _dbContext.Clients.FirstOrDefaultAsync(c => c.Email == email);
+
+            if (client == null)
+            {
+                // Client with the provided email doesn't exist
+                return null;
+            }
+
+            // Verify the password using PasswordService
+            if (!_passwordService.VerifyPasswordHash(password, client.PasswordHash, client.PasswordSalt))
+            {
+                // Password doesn't match
+                return null;
+            }
+
+            // Authentication successful
+            return client;
+        }
+//-----------------------------------------------------------------------------------------DONE-----------------------------------------------------------------------------------
+
 
 
         public async Task<IEnumerable<Client>> GetClientsAsync()
@@ -92,9 +117,6 @@ namespace Domain.ClientService
             }
         }
 
-        public Task<Client> AuthenticateClientAsync(string email, string password)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }

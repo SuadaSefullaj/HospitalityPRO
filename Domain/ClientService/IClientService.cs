@@ -10,9 +10,11 @@ namespace Domain.ClientService
 {
     public interface IClientService
     {
-        Task<Client> RegisterClientAsync(ClientRegistrationDTO request);
+        Task<Client> RegisterClientAsync(ClientRegistrationDTO request); 
 
         Task<Client> AuthenticateClientAsync(string email, string password);
+
+
 
         string GetMyName();
         Task<IEnumerable<Client>> GetClientsAsync();
