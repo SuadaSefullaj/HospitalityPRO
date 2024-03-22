@@ -84,7 +84,34 @@ namespace Domain.ClientService
             // Authentication successful
             return client;
         }
-//-----------------------------------------------------------------------------------------DONE-----------------------------------------------------------------------------------
+
+
+        public async Task<Client> RegisterAdminAsync(ClientRegistrationDTO request)
+        {
+            // Check if the current user is an admin
+            var currentUser = _httpContextAccessor.HttpContext.User;
+            if (currentUser == null || !currentUser.IsInRole("Admin"))
+            {
+                // If the current user is not an admin, return null or throw an exception
+                return null; 
+            }
+            var admin = new Client
+            {
+                Name = request.Name,
+                Surname = request.Surname,
+                Email = request.Email,
+                PhoneNumber = request.PhoneNumber,
+                Role = "Admin"
+            };
+
+            // Add the new admin client to the database
+            _dbContext.Clients.Add(admin);
+            await _dbContext.SaveChangesAsync();
+
+            return admin;
+        }
+
+        //-----------------------------------------------------------------------------------------DONE-----------------------------------------------------------------------------------
 
 
 

@@ -25,12 +25,14 @@ namespace HumanResourceProject.Controllers
         private readonly IConfiguration _configuration; //it's used to retrieve the token secret key from the configuration, which is then used to generate JWT tokens for authentication purposes.
         private readonly IClientService _clientService;
         private readonly TokenService _tokenService;
+        private readonly PasswordService _passwordService;
 
-        public AuthController(IConfiguration configuration, IClientService clientService, TokenService tokenService)
+        public AuthController(IConfiguration configuration, IClientService clientService, TokenService tokenService, PasswordService passwordService)
         {
             _configuration = configuration;
             _clientService = clientService;
             _tokenService = tokenService;
+            _passwordService = passwordService;
         }
 
         [HttpGet, Authorize(Roles ="Admin")]
@@ -60,15 +62,12 @@ namespace HumanResourceProject.Controllers
 
         //-------------------------------------------------------------------END-----------------------------------------------------------------------------------------------------
 
-        [HttpPost("register-admin"), Authorize(Roles = "Admin")]
+        [HttpPost("register-admin")]
+        [Authorize] // Require authentication but don't specify any roles
         public async Task<ActionResult<Client>> RegisterAdmin(ClientRegistrationDTO request)
         {
-            // Check if the current user is an admin
-            var currentUser = HttpContext.User;
-            if (currentUser == null || !currentUser.IsInRole("Admin"))
-            {
-                return Forbid(); // User is not authorized to register an admin
-            }
+            
+
 
             // Mock registration for admin (without updating the database)
             var admin = new Client
@@ -80,13 +79,8 @@ namespace HumanResourceProject.Controllers
                Role="Admin"
             };
 
-            // Return the mocked admin data
             return Ok(admin);
         }
-
-
-
-
         //----------------------------------------------------------------------LOGIN---------------------------------------------------------------------------------
 
         [HttpPost("login")]
@@ -100,6 +94,7 @@ namespace HumanResourceProject.Controllers
             {
                 return Unauthorized("Invalid email or password.");
             }
+
 
             // Generate token
             string token = _tokenService.CreateToken(client);
@@ -138,7 +133,6 @@ namespace HumanResourceProject.Controllers
 
             return Ok(token);
         }
-
 
     }
 }
