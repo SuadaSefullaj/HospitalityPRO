@@ -116,8 +116,8 @@ namespace Domain.ClientService
             }
 
             // Update the LastLogin attribute
-            //client.LastLogin = DateTime.Now;
-            //await _dbContext.SaveChangesAsync();
+            client.LastLogin = DateTime.Now;
+            await _dbContext.SaveChangesAsync();
 
             // Authentication successful
             return client;

@@ -21,7 +21,7 @@ namespace HumanResourceProject.Models
         public DateTime Birth { get; set; }
         public string PhoneNumber { get; set; } = null!;
         public string Role { get; set; } = "Client";
-        //public DateTime LastLogin { get; set; }
+        public DateTime LastLogin { get; set; }
 
         [JsonIgnore]
         public byte[] PasswordHash { get; set; } = null!;
