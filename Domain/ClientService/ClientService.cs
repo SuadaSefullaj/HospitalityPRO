@@ -50,7 +50,6 @@ namespace Domain.ClientService
                 Name = request.Name,
                 Surname = request.Surname,
                 Email = request.Email,
-                Password = request.Password,
                 PhoneNumber = request.PhoneNumber,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt
@@ -78,7 +77,6 @@ namespace Domain.ClientService
                 Name = request.Name,
                 Surname = request.Surname,
                 Email = request.Email,
-                Password = request.Password,
                 PhoneNumber = request.PhoneNumber,
                 Role = "Admin", 
                 PasswordHash = passwordHash,
