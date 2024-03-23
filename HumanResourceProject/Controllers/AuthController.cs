@@ -48,39 +48,22 @@ namespace HumanResourceProject.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<Client>> Register(ClientRegistrationDTO request)
         {
-            // Input validation
-            if (string.IsNullOrWhiteSpace(request.Password))
-            {
-                return BadRequest("Password is required.");
-            }
-
             // Call the client service to register the client
             var client = await _clientService.RegisterClientAsync(request);
             string token = _tokenService.CreateToken(client);
             return Ok(client); //or token Im not sure
         }
 
-        //-------------------------------------------------------------------END-----------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------REGISTER_ADMIN-----------------------------------------------------------------------------------------------------
 
         [HttpPost("register-admin")]
-        [Authorize] // Require authentication but don't specify any roles
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Client>> RegisterAdmin(ClientRegistrationDTO request)
         {
-            
-
-
-            // Mock registration for admin (without updating the database)
-            var admin = new Client
-            {
-                Name = request.Name,
-                Surname = request.Surname,
-                Email = request.Email,
-                PhoneNumber = request.PhoneNumber,
-               Role="Admin"
-            };
-
-            return Ok(admin);
+            var registeredAdmin = await _clientService.RegisterAdminAsync(request);
+            return Ok(registeredAdmin);
         }
+
         //----------------------------------------------------------------------LOGIN---------------------------------------------------------------------------------
 
         [HttpPost("login")]

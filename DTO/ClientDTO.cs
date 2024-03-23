@@ -9,21 +9,24 @@ namespace DTO
 {
     public class ClientRegistrationDTO
     {
-        // public Guid UserId { get; set; }
-        public string Name { get; set; } = null!;
-        public string Surname { get; set; } = null!;
 
-        public string Email { get; set; } = null!;
-        //public string LastName { get; set; } = null!;
-        ////public DateTime Dob { get; set; }
-        public string Password { get; set; } = null!;
+        [Required(ErrorMessage = "Name is required")]
+        public string Name { get; set; }
 
-        public string PhoneNumber { get; set; } = null!;
+        [Required(ErrorMessage = "Surname is required")]
+        public string Surname { get; set; }
 
-        public DateTime Birth { get; set; } 
+        [Required(ErrorMessage = "Email is required")]
+        public string Email { get; set; }
 
+        [Required(ErrorMessage = "Password is required")]
+        public string Password { get; set; }
 
-        //public int Status { get; set; }
+        [Required(ErrorMessage = "Phone number is required")]
+        public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Birth date is required")]
+        public DateTime Birth { get; set; }
     }
 
 

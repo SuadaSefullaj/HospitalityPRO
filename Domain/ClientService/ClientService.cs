@@ -1,4 +1,5 @@
 ﻿using DTO;
+using Hangfire;
 using HumanResourceProject.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +37,7 @@ namespace Domain.ClientService
         }
 
 
-        //------------------------------------------------------------------------------REGISTER CLIENT-----------------------------------------------------------------------------
+        //----------------------------------------------------------------------REGISTER CLIENT-----------------------------------------------------------------------------
         public async Task<Client> RegisterClientAsync(ClientRegistrationDTO request)
         {
 
@@ -61,7 +62,40 @@ namespace Domain.ClientService
 
             return client;
         }
-    //------------------------------------------------------------------------------------LOGIN--------------------------------------------------------------------------------
+
+        //---------------------------------------------------------------------------REGISER_ADMIN-----------------------------------------------------------------------------------
+        public async Task<Client> RegisterAdminAsync(ClientRegistrationDTO request)
+        {
+            // Check if the email is already registered
+            if (await IsEmailRegisteredAsync(request.Email))
+            {
+                throw new Exception("Email is already registered.");
+            }
+            _passwordService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+           
+            var admin = new Client
+            {
+                Name = request.Name,
+                Surname = request.Surname,
+                Email = request.Email,
+                Password = request.Password,
+                PhoneNumber = request.PhoneNumber,
+                Role = "Admin", 
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
+            };
+
+            // Add the new admin to the database
+            _dbContext.Clients.Add(admin);
+            await _dbContext.SaveChangesAsync();
+
+            return admin;
+        }
+        private async Task<bool> IsEmailRegisteredAsync(string email)
+        {
+            return await _dbContext.Clients.AnyAsync(c => c.Email == email);
+        }
+        //----------------------------------------------------------------------------LOGIN-------------------------------------------------------------------------------------
 
         public async Task<Client> AuthenticateClientAsync(string email, string password)
         {
@@ -81,38 +115,15 @@ namespace Domain.ClientService
                 return null;
             }
 
+            // Update the LastLogin attribute
+            //client.LastLogin = DateTime.Now;
+            //await _dbContext.SaveChangesAsync();
+
             // Authentication successful
             return client;
         }
 
-
-        public async Task<Client> RegisterAdminAsync(ClientRegistrationDTO request)
-        {
-            // Check if the current user is an admin
-            var currentUser = _httpContextAccessor.HttpContext.User;
-            if (currentUser == null || !currentUser.IsInRole("Admin"))
-            {
-                // If the current user is not an admin, return null or throw an exception
-                return null; 
-            }
-            var admin = new Client
-            {
-                Name = request.Name,
-                Surname = request.Surname,
-                Email = request.Email,
-                PhoneNumber = request.PhoneNumber,
-                Role = "Admin"
-            };
-
-            // Add the new admin client to the database
-            _dbContext.Clients.Add(admin);
-            await _dbContext.SaveChangesAsync();
-
-            return admin;
-        }
-
-        //-----------------------------------------------------------------------------------------DONE-----------------------------------------------------------------------------------
-
+       //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
         public async Task<IEnumerable<Client>> GetClientsAsync()
