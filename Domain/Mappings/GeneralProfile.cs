@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using DTO;
 using DTO.UserDTO;
 using Entities.Models;
+using HumanResourceProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +13,14 @@ namespace Domain.Mappings
 {
     public class GeneralProfile : Profile
     {
-        #region User
+        #region Client
         public GeneralProfile()
         {
-           CreateMap<User, UserDTO>().ReverseMap();
+           CreateMap<Client, ClientLoginDTO>().ReverseMap();
+           CreateMap<Client, ClientRegistrationDTO>().ReverseMap();
 
         }
-
         #endregion
-
 
     }
 }

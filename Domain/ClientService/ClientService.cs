@@ -1,4 +1,5 @@
-﻿using DTO;
+﻿using AutoMapper;
+using DTO;
 using Hangfire;
 using HumanResourceProject.Models;
 using Microsoft.AspNetCore.Http;
@@ -19,41 +20,24 @@ namespace Domain.ClientService
         private readonly HospitalityPRO_DbContext _dbContext;
         private readonly PasswordService _passwordService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMapper _mapper;
 
-        public ClientService(IHttpContextAccessor httpContextAccessor, HospitalityPRO_DbContext dbContext, PasswordService passwordService)
+        public ClientService(IHttpContextAccessor httpContextAccessor, HospitalityPRO_DbContext dbContext, PasswordService passwordService, IMapper mapper)
         {
             _httpContextAccessor = httpContextAccessor;
             _dbContext = dbContext;
             _passwordService = passwordService;
+            _mapper = mapper;
         }
-        public string GetMyName()
-        {
-            var result = string.Empty;
-            if (_httpContextAccessor.HttpContext != null)
-            {
-                result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
-            }
-            return result;
-        }
-
-
         //----------------------------------------------------------------------REGISTER CLIENT-----------------------------------------------------------------------------
         public async Task<Client> RegisterClientAsync(ClientRegistrationDTO request)
         {
 
-            // Create password hash
+            var client = _mapper.Map<Client>(request);
             _passwordService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            // Create a new Client instance
-            var client = new Client
-            {
-                Name = request.Name,
-                Surname = request.Surname,
-                Email = request.Email,
-                PhoneNumber = request.PhoneNumber,
-                PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt
-            };
+            client.PasswordHash = passwordHash;
+            client.PasswordSalt = passwordSalt;
 
             // Add the new client to the database
             _dbContext.Clients.Add(client);
@@ -65,23 +49,15 @@ namespace Domain.ClientService
         //---------------------------------------------------------------------------REGISER_ADMIN-----------------------------------------------------------------------------------
         public async Task<Client> RegisterAdminAsync(ClientRegistrationDTO request)
         {
-            // Check if the email is already registered
             if (await IsEmailRegisteredAsync(request.Email))
             {
                 throw new Exception("Email is already registered.");
             }
+            var admin = _mapper.Map<Client>(request);
+            admin.Role = "Admin";
             _passwordService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-           
-            var admin = new Client
-            {
-                Name = request.Name,
-                Surname = request.Surname,
-                Email = request.Email,
-                PhoneNumber = request.PhoneNumber,
-                Role = "Admin", 
-                PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt
-            };
+            admin.PasswordHash = passwordHash;
+            admin.PasswordSalt = passwordSalt;
 
             // Add the new admin to the database
             _dbContext.Clients.Add(admin);
@@ -97,27 +73,24 @@ namespace Domain.ClientService
 
         public async Task<Client> AuthenticateClientAsync(string email, string password)
         {
-            // Retrieve client from database by email
+            // Get client from database by email
             var client = await _dbContext.Clients.FirstOrDefaultAsync(c => c.Email == email);
 
             if (client == null)
             {
-                // Client with the provided email doesn't exist
-                return null;
+                return null; // Client with the provided email does not exist
             }
 
             // Verify the password using PasswordService
             if (!_passwordService.VerifyPasswordHash(password, client.PasswordHash, client.PasswordSalt))
             {
-                // Password doesn't match
-                return null;
+                return null; // Password doesn't match
             }
 
             // Update the LastLogin attribute
             client.LastLogin = DateTime.Now;
             await _dbContext.SaveChangesAsync();
 
-            // Authentication successful
             return client;
         }
 
@@ -143,15 +116,7 @@ namespace Domain.ClientService
             return client;
         }
 
-        public async Task DeleteClientAsync(int id)
-        {
-            var client = await _dbContext.Clients.FindAsync(id);
-            if (client != null)
-            {
-                _dbContext.Clients.Remove(client);
-                await _dbContext.SaveChangesAsync();
-            }
-        }
+      
 
       
     }

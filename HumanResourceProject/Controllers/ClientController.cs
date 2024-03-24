@@ -45,12 +45,5 @@ namespace HumanResourceProject.Controllers
             return CreatedAtAction(nameof(GetClient), new { id = addedClient.ClientId }, addedClient);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteClient(int id)
-        {
-            await _clientService.DeleteClientAsync(id);
-            return NoContent();
-        }
-
     }
 }

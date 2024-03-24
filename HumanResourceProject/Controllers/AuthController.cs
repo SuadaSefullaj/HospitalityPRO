@@ -1,4 +1,5 @@
-﻿using Domain.ClientService;
+﻿using AutoMapper;
+using Domain.ClientService;
 using DTO;
 using Entities.Models;
 using Helpers;
@@ -26,31 +27,24 @@ namespace HumanResourceProject.Controllers
         private readonly IClientService _clientService;
         private readonly TokenService _tokenService;
         private readonly PasswordService _passwordService;
+        private readonly IMapper _mapper;
 
-        public AuthController(IConfiguration configuration, IClientService clientService, TokenService tokenService, PasswordService passwordService)
+        public AuthController(IConfiguration configuration, IClientService clientService, TokenService tokenService, PasswordService passwordService, IMapper mapper)
         {
             _configuration = configuration;
             _clientService = clientService;
             _tokenService = tokenService;
             _passwordService = passwordService;
+            _mapper = mapper;
         }
-
-        [HttpGet, Authorize(Roles ="Admin")]
-        public ActionResult<string> GetMe()
-        {
-            var Email = _clientService.GetMyName();
-            return Ok(Email);
-        }
-
 
         //----------------------------------------------------------------------REGISTER---------------------------------------------------------------------------------
 
         [HttpPost("register")]
         public async Task<ActionResult<Client>> Register(ClientRegistrationDTO request)
         {
-            // Call the client service to register the client
-            var client = await _clientService.RegisterClientAsync(request);
-            string token = _tokenService.CreateToken(client);
+            var client = await _clientService.RegisterClientAsync(_mapper.Map<ClientRegistrationDTO>(request));
+            //string token = _tokenService.CreateToken(client);
             return Ok(client); //or token Im not sure
         }
 
@@ -60,8 +54,8 @@ namespace HumanResourceProject.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Client>> RegisterAdmin(ClientRegistrationDTO request)
         {
-            var registeredAdmin = await _clientService.RegisterAdminAsync(request);
-            return Ok(registeredAdmin);
+            var admin = await _clientService.RegisterAdminAsync(_mapper.Map<ClientRegistrationDTO>(request));
+            return Ok(admin);
         }
 
         //----------------------------------------------------------------------LOGIN---------------------------------------------------------------------------------
@@ -71,6 +65,7 @@ namespace HumanResourceProject.Controllers
         {
 
             // Authenticated client
+   
             var client = await _clientService.AuthenticateClientAsync(request.Email, request.Password);
 
             if (client == null)
