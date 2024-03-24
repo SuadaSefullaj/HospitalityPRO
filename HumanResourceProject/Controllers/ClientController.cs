@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HumanResourceProject.Models;
-using Domain.ClientService;
-
+using DAL.ClientRepository;
 
 namespace HumanResourceProject.Controllers
 {
@@ -13,37 +10,43 @@ namespace HumanResourceProject.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
-        private readonly IClientService _clientService;
+        private readonly IClientRepository _clientRepository;
 
-        public ClientController(IClientService clientService)
+        public ClientController(IClientRepository clientRepository)
         {
-            _clientService = clientService;
+            _clientRepository = clientRepository;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Client>>> GetClients()
+        [HttpGet("getAllClients")] 
+        public async Task<ActionResult<IEnumerable<Client>>> GetAllClients()
         {
-            var clients = await _clientService.GetClientsAsync();
-            return Ok(clients);
+            try
+            {
+                var clients = await _clientRepository.GetAllClientsAsync();
+                return Ok(clients);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex); 
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Client>> GetClient(int id)
+        public async Task<ActionResult<Client>> GetClientById(int id)
         {
-            var client = await _clientService.GetClientByIdAsync(id);
-            if (client == null)
+            try
             {
-                return NotFound();
+                var client = await _clientRepository.GetClientByIdAsync(id);
+                if (client == null)
+                {
+                    return NotFound(); 
+                }
+                return Ok(client);
             }
-            return client;
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex); 
+            }
         }
-
-        [HttpPost]
-        public async Task<ActionResult<Client>> PostClient(Client client)
-        {
-            var addedClient = await _clientService.AddClientAsync(client);
-            return CreatedAtAction(nameof(GetClient), new { id = addedClient.ClientId }, addedClient);
-        }
-
     }
 }
