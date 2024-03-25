@@ -94,30 +94,18 @@ namespace Domain.ClientService
             return client;
         }
 
-       //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------DELETE_CLIENT-----------------------------------------------------------------------------------------------
 
+        //public async Task CleanInactiveUsersAsync()
+        //{
+        //    var sevenMonthsAgo = DateTime.UtcNow.AddMonths(-7);
 
-        public async Task<IEnumerable<Client>> GetClientsAsync()
-        {
-            return await _dbContext.Clients.ToListAsync();
-        }
+        //    var inactiveUsers = await _dbContext.Clients
+        //        .Where(u => u.LastLogin < sevenMonthsAgo)
+        //        .ToListAsync();
 
-
-
-        public async Task<Client> GetClientByIdAsync(int id)
-        {
-            return await _dbContext.Clients.FindAsync(id);
-        }
-
-        public async Task<Client> AddClientAsync(Client client)
-        {
-            _dbContext.Clients.Add(client);
-            await _dbContext.SaveChangesAsync();
-            return client;
-        }
-
-      
-
-      
+        //    _dbContext.Clients.RemoveRange(inactiveUsers);
+        //    await _dbContext.SaveChangesAsync();
+        //}
     }
 }

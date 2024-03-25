@@ -3,6 +3,9 @@ using DI;
 using Domain.ClientService;
 using Domain.Mappings;
 using Entities.Models;
+using Hangfire;
+using Hangfire.SqlServer;
+using HumanResourceProject.Models;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -59,6 +62,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());
 });
+// Configure Hangfire
+//builder.Services.AddHangfire(configuration => configuration
+//    .UseSqlServerStorage(connString));
+
 
 // use Lamar as DI.
 builder.Host.UseLamar((context, registry) =>
@@ -84,5 +91,10 @@ app.UseAuthentication(); //middleware
 app.UseAuthorization();
 
 app.MapControllers();
+//// Configure Hangfire server
+//app.UseHangfireServer();
+
+//// Configure recurring job
+//RecurringJob.AddOrUpdate<IClientService>("CleanInactiveUsers", x => x.CleanInactiveUsersAsync(), Cron.Daily);
 
 app.Run();
