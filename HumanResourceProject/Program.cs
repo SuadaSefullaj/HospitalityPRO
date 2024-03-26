@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Quartz;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
@@ -59,6 +60,33 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());
 });
+builder.Services.AddQuartz(configure =>
+{
+    configure.UseMicrosoftDependencyInjectionJobFactory();
+});
+
+
+// add QUARTZ services
+builder.Services.AddQuartzHostedService(options =>
+{
+    options.WaitForJobsToComplete = true;
+});
+builder.Services.AddQuartz(configure =>
+{
+    var jobKey = new JobKey(nameof(DeleteInactiveClientsJob));
+
+    configure
+        .AddJob<DeleteInactiveClientsJob>(jobKey)
+        .AddTrigger(
+            trigger => trigger
+                .ForJob(jobKey)
+                .WithSimpleSchedule(schedule => schedule
+                    .WithIntervalInHours(24) // Run once a day
+                    .RepeatForever()));
+
+    configure.UseMicrosoftDependencyInjectionJobFactory();
+});
+
 
 // use Lamar as DI.
 builder.Host.UseLamar((context, registry) =>
