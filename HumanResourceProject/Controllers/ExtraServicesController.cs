@@ -1,5 +1,4 @@
-﻿using HospitalityPRO.Model;
-using HumanResourceProject.Models;
+﻿using HumanResourceProject.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
