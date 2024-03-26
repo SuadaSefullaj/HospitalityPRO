@@ -44,8 +44,7 @@ namespace HumanResourceProject.Controllers
         public async Task<ActionResult<Client>> Register(ClientRegistrationDTO request)
         {
             var client = await _clientService.RegisterClientAsync(_mapper.Map<ClientRegistrationDTO>(request));
-            //string token = _tokenService.CreateToken(client);
-            return Ok(client); //or token Im not sure
+            return Ok(client); 
         }
 
         //-------------------------------------------------------------------REGISTER_ADMIN-----------------------------------------------------------------------------------------------------
@@ -107,7 +106,7 @@ namespace HumanResourceProject.Controllers
 
             var newRefreshToken = _tokenService.GenerateRefreshToken();
 
-            _tokenService.SetRefreshToken(HttpContext, client, newRefreshToken);
+            _tokenService.SetRefreshToken(HttpContext, client,newRefreshToken);
 
             return Ok(token);
         }

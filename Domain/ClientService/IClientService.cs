@@ -13,7 +13,6 @@ namespace Domain.ClientService
         Task<Client> RegisterClientAsync(ClientRegistrationDTO request);
         Task<Client> AuthenticateClientAsync(string email, string password);
         Task<Client> RegisterAdminAsync(ClientRegistrationDTO request);
-        //Task CleanInactiveUsersAsync();
-
+    
     }
 }

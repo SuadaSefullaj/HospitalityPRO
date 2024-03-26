@@ -1,6 +1,7 @@
 ﻿using Helpers;
 using HumanResourceProject.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -17,10 +18,12 @@ namespace Domain.ClientService
     public class TokenService
     {
         private readonly IConfiguration _configuration;
+        private readonly HospitalityPRO_DbContext _dbContext;
 
-        public TokenService(IConfiguration configuration)
+        public TokenService(IConfiguration configuration, HospitalityPRO_DbContext dbContext)
         {
             _configuration = configuration;
+            _dbContext = dbContext;
         }
 
         public string CreateToken(Client client)
@@ -69,6 +72,8 @@ namespace Domain.ClientService
             client.RefreshToken = newRefreshToken.Token;
             client.TokenCreated = newRefreshToken.Created;
             client.TokenExpires = newRefreshToken.Expires;
+
+            _dbContext.SaveChanges();
         }
     }
 }

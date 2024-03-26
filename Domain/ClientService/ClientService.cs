@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DTO;
-using Hangfire;
 using HumanResourceProject.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +31,17 @@ namespace Domain.ClientService
         //----------------------------------------------------------------------REGISTER CLIENT-----------------------------------------------------------------------------
         public async Task<Client> RegisterClientAsync(ClientRegistrationDTO request)
         {
+            if (_dbContext.Clients.Any(c => c.Email == request.Email))
+            {
+                throw new InvalidOperationException("An account with this email already exists.");
+              
+            }
+            // Check if the user is under 18
+            var underage = DateTime.Today.AddYears(-18);
+            if (request.Birth > underage)
+            {
+                throw new InvalidOperationException("You must be at least 18 years old to create an account.");
+            }
 
             var client = _mapper.Map<Client>(request);
             _passwordService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -94,18 +104,5 @@ namespace Domain.ClientService
             return client;
         }
 
-        //----------------------------------------------------------------------------DELETE_CLIENT-----------------------------------------------------------------------------------------------
-
-        //public async Task CleanInactiveUsersAsync()
-        //{
-        //    var sevenMonthsAgo = DateTime.UtcNow.AddMonths(-7);
-
-        //    var inactiveUsers = await _dbContext.Clients
-        //        .Where(u => u.LastLogin < sevenMonthsAgo)
-        //        .ToListAsync();
-
-        //    _dbContext.Clients.RemoveRange(inactiveUsers);
-        //    await _dbContext.SaveChangesAsync();
-        //}
     }
 }
