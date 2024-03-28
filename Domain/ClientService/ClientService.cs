@@ -43,6 +43,7 @@ namespace Domain.ClientService
                 throw new InvalidOperationException("You must be at least 18 years old to create an account.");
             }
 
+
             var client = _mapper.Map<Client>(request);
             _passwordService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 

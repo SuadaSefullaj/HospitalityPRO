@@ -88,7 +88,7 @@ namespace HumanResourceProject.Controllers
             // Set refresh token
             _tokenService.SetRefreshToken(HttpContext, client, newRefreshToken);
 
-            return Ok(new { Token = token, RefreshToken = newRefreshToken });
+            return Ok(token);
 
 
         }
