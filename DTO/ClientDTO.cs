@@ -11,32 +11,32 @@ namespace DTO
     {
 
         [Required(ErrorMessage = "Name is required")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Surname is required")]
-        public string Surname { get; set; }
+        public string Surname { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Email is required")]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Password is required")]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Phone number is required")]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Birth date is required")]
-        public DateTime Birth { get; set; }
+        public DateTime Birth { get; set; } 
     }
 
 
     public class ClientLoginDTO
     {
         [Required(ErrorMessage = "Email is required")]
-        public string Email { get; set; } = null!;
+        public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Password is required")]
-        public string Password { get; set; } = null!;
+        public string Password { get; set; } = string.Empty;
 
     }
 }

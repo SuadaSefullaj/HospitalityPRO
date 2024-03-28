@@ -24,7 +24,8 @@ namespace DAL.ClientRepository
 
         public async Task<Client> GetClientByIdAsync(int id)
         {
-            return await _dbContext.Clients.FirstOrDefaultAsync(c => c.ClientId == id);
+            return await _dbContext.Clients.FirstOrDefaultAsync(c => c.ClientId == id)
+                 ?? throw new Exception("Client not found"); ;
         }
     }
 }

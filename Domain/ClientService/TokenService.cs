@@ -1,5 +1,4 @@
 ﻿using Entities.Models;
-using Helpers;
 using HumanResourceProject.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +17,7 @@ namespace Domain.ClientService
 {
     public class TokenService
     {
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration; //it's used to retrieve the token secret key from the configuration, which is then used to generate JWT tokens for authentication purposes.
         private readonly HospitalityPRO_DbContext _dbContext;
 
         public TokenService(IConfiguration configuration, HospitalityPRO_DbContext dbContext)
@@ -29,7 +28,7 @@ namespace Domain.ClientService
 
         public string CreateToken(Client client)
         {
-            List<Claim> claims = new List<Claim>
+            List<Claim> claims = new ()
             {
                 new Claim(ClaimTypes.Email, client.Email),
                 new Claim(ClaimTypes.Role, client.Role)
@@ -69,10 +68,6 @@ namespace Domain.ClientService
                 Expires = refreshToken.Expires
             };
             httpContext.Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
-
-            //client.RefreshToken = refreshToken.Token;
-            //client.TokenCreated = refreshToken.Created;
-            //client.TokenExpires = refreshToken.Expires;
 
             _dbContext.RefreshTokens.Add(refreshToken);
             _dbContext.SaveChanges();

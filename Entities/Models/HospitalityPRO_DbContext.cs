@@ -26,7 +26,7 @@ namespace HumanResourceProject.Models
         public virtual DbSet<ReservationService> ReservationServices { get; set; } = null!;
         public virtual DbSet<Room> Rooms { get; set; } = null!;
         public virtual DbSet<RoomType> RoomTypes { get; set; } = null!;
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

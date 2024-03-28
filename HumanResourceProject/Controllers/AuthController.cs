@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Domain.ClientService;
 using DTO;
-using Entities.Models;
-using Helpers;
 using HumanResourceProject.Models;
 using LamarCodeGeneration.Frames;
 using Microsoft.AspNetCore.Authorization;
@@ -22,21 +20,18 @@ namespace HumanResourceProject.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-
-        public static Client client = new Client();
-        private readonly IConfiguration _configuration; //it's used to retrieve the token secret key from the configuration, which is then used to generate JWT tokens for authentication purposes.
+        public static Client client = new();
         private readonly IClientService _clientService;
         private readonly TokenService _tokenService;
         private readonly PasswordService _passwordService;
         private readonly IMapper _mapper;
         private readonly HospitalityPRO_DbContext _dbContext;
 
-        public AuthController(IConfiguration configuration, IClientService clientService, TokenService tokenService, PasswordService passwordService, IMapper mapper, HospitalityPRO_DbContext dbContext)
+
+        public AuthController(IClientService clientService, TokenService tokenService, PasswordService passwordService, IMapper mapper, HospitalityPRO_DbContext dbContext)
         {
-            _configuration = configuration;
             _clientService = clientService;
             _tokenService = tokenService;
-            _passwordService = passwordService;
             _mapper = mapper;
             _dbContext = dbContext;
         }
@@ -89,8 +84,6 @@ namespace HumanResourceProject.Controllers
             _tokenService.SetRefreshToken(HttpContext, client, newRefreshToken);
 
             return Ok(token);
-
-
         }
 
         //----------------------------------------------------------------------REFRESH_TOKEN---------------------------------------------------------------------------------
@@ -120,9 +113,6 @@ namespace HumanResourceProject.Controllers
 
             return Ok(token);
         }
-
-
-
 
     }
 }

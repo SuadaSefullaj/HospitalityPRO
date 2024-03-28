@@ -12,6 +12,7 @@ namespace HumanResourceProject.Models
             NotificationReceiverClients = new HashSet<Notification>();
             NotificationSenderClients = new HashSet<Notification>();
             Reservations = new HashSet<Reservation>();
+            RefreshTokens = new HashSet<RefreshToken>();
         }
 
         public int ClientId { get; set; }

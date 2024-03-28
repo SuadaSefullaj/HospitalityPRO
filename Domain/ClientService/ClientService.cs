@@ -43,6 +43,10 @@ namespace Domain.ClientService
                 throw new InvalidOperationException("You must be at least 18 years old to create an account.");
             }
 
+            if (request.Password.Length < 8)
+            {
+                throw new InvalidOperationException("Password must be at least 8 characters long.");
+            }
 
             var client = _mapper.Map<Client>(request);
             _passwordService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -63,6 +67,10 @@ namespace Domain.ClientService
             if (await IsEmailRegisteredAsync(request.Email))
             {
                 throw new Exception("Email is already registered.");
+            }
+            if (request.Password.Length < 8)
+            {
+                throw new InvalidOperationException("Password must be at least 8 characters long.");
             }
             var admin = _mapper.Map<Client>(request);
             admin.Role = "Admin";
@@ -89,13 +97,13 @@ namespace Domain.ClientService
 
             if (client == null)
             {
-                return null; // Client with the provided email does not exist
+                throw new Exception("Client with the provided email does not exist");
             }
 
             // Verify the password using PasswordService
             if (!_passwordService.VerifyPasswordHash(password, client.PasswordHash, client.PasswordSalt))
             {
-                return null; // Password doesn't match
+                throw new Exception("Password doesn't match");
             }
 
             // Update the LastLogin attribute
