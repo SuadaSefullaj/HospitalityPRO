@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -25,6 +26,8 @@ namespace HumanResourceProject.Models
         public virtual DbSet<ReservationService> ReservationServices { get; set; } = null!;
         public virtual DbSet<Room> Rooms { get; set; } = null!;
         public virtual DbSet<RoomType> RoomTypes { get; set; } = null!;
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -288,7 +291,32 @@ namespace HumanResourceProject.Models
             });
 
             OnModelCreatingPartial(modelBuilder);
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.HasKey(e => e.TokenId)
+                    .HasName("PK_RefreshTokens");
+
+                entity.ToTable("RefreshTokens");
+
+                entity.Property(e => e.TokenId).HasColumnName("TokenId");
+
+                entity.Property(e => e.Token)
+                    .IsRequired();
+
+                entity.Property(e => e.Created)
+                    .IsRequired();
+
+                entity.Property(e => e.Expires)
+                    .IsRequired();
+
+                // Configure relationship
+                entity.HasOne(rt => rt.Client)
+                      .WithMany(c => c.RefreshTokens)
+                      .HasForeignKey(rt => rt.ClientId)
+                      .IsRequired();
+            });
         }
+
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }

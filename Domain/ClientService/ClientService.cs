@@ -83,7 +83,7 @@ namespace Domain.ClientService
 
         public async Task<Client> AuthenticateClientAsync(string email, string password)
         {
-            // Get client from database by email
+          
             var client = await _dbContext.Clients.FirstOrDefaultAsync(c => c.Email == email);
 
             if (client == null)

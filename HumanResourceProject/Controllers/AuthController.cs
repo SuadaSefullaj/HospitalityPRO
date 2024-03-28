@@ -8,6 +8,7 @@ using LamarCodeGeneration.Frames;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -28,14 +29,16 @@ namespace HumanResourceProject.Controllers
         private readonly TokenService _tokenService;
         private readonly PasswordService _passwordService;
         private readonly IMapper _mapper;
+        private readonly HospitalityPRO_DbContext _dbContext;
 
-        public AuthController(IConfiguration configuration, IClientService clientService, TokenService tokenService, PasswordService passwordService, IMapper mapper)
+        public AuthController(IConfiguration configuration, IClientService clientService, TokenService tokenService, PasswordService passwordService, IMapper mapper, HospitalityPRO_DbContext dbContext)
         {
             _configuration = configuration;
             _clientService = clientService;
             _tokenService = tokenService;
             _passwordService = passwordService;
             _mapper = mapper;
+            _dbContext = dbContext;
         }
 
         //----------------------------------------------------------------------REGISTER---------------------------------------------------------------------------------
@@ -77,39 +80,49 @@ namespace HumanResourceProject.Controllers
             string token = _tokenService.CreateToken(client);
 
             // Generate refresh token
-            var newRefreshToken = _tokenService.GenerateRefreshToken();
+            var newRefreshToken = TokenService.GenerateRefreshToken();
+
+            // Set the client's ID on the refresh token
+            newRefreshToken.ClientId = client.ClientId;
 
             // Set refresh token
             _tokenService.SetRefreshToken(HttpContext, client, newRefreshToken);
 
-            return Ok(token);
+            return Ok(new { Token = token, RefreshToken = newRefreshToken });
+
 
         }
 
         //----------------------------------------------------------------------REFRESH_TOKEN---------------------------------------------------------------------------------
-
         [HttpPost("refresh-token")]
         public async Task<ActionResult<string>> RefreshToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
 
-            if (!client.RefreshToken.Equals(refreshToken))
+            var refreshTokenEntity = await _dbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == refreshToken);
+
+            if (refreshTokenEntity == null)
             {
                 return Unauthorized("Invalid Refresh Token.");
             }
-            else if (client.TokenExpires < DateTime.Now)
+            else if (refreshTokenEntity.Expires < DateTime.Now)
             {
-                return Unauthorized("Token expired.");
+                return Unauthorized("Refresh token expired.");
+            }
+
+            var client = await _dbContext.Clients.FindAsync(refreshTokenEntity.ClientId);
+            if (client == null)
+            {
+                return Unauthorized("Client not found.");
             }
 
             string token = _tokenService.CreateToken(client);
 
-            var newRefreshToken = _tokenService.GenerateRefreshToken();
-
-            _tokenService.SetRefreshToken(HttpContext, client,newRefreshToken);
-
             return Ok(token);
         }
+
+
+
 
     }
 }

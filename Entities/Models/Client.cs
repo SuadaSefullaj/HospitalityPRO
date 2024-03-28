@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.Models;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -35,5 +36,6 @@ namespace HumanResourceProject.Models
         public virtual ICollection<Notification> NotificationReceiverClients { get; set; }
         public virtual ICollection<Notification> NotificationSenderClients { get; set; }
         public virtual ICollection<Reservation> Reservations { get; set; }
+        public ICollection<RefreshToken> RefreshTokens { get; set; }
     }
 }

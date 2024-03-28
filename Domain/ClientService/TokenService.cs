@@ -1,4 +1,5 @@
-﻿using Helpers;
+﻿using Entities.Models;
+using Helpers;
 using HumanResourceProject.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -48,10 +49,11 @@ namespace Domain.ClientService
 
             return jwt;
         }
-        public RefreshToken GenerateRefreshToken()
+        public static RefreshToken GenerateRefreshToken()
         {
             var refreshToken = new RefreshToken
             {
+
                 Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
                 Expires = DateTime.Now.AddDays(7),
                 Created = DateTime.Now
@@ -59,20 +61,20 @@ namespace Domain.ClientService
 
             return refreshToken;
         }
-
-        public void SetRefreshToken(HttpContext httpContext, Client client, RefreshToken newRefreshToken)
+        public void SetRefreshToken(HttpContext httpContext, Client client, RefreshToken refreshToken)
         {
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = newRefreshToken.Expires
+                Expires = refreshToken.Expires
             };
-            httpContext.Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
+            httpContext.Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
 
-            client.RefreshToken = newRefreshToken.Token;
-            client.TokenCreated = newRefreshToken.Created;
-            client.TokenExpires = newRefreshToken.Expires;
+            //client.RefreshToken = refreshToken.Token;
+            //client.TokenCreated = refreshToken.Created;
+            //client.TokenExpires = refreshToken.Expires;
 
+            _dbContext.RefreshTokens.Add(refreshToken);
             _dbContext.SaveChanges();
         }
     }
