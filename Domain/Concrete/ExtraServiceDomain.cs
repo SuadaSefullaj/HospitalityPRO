@@ -1,5 +1,5 @@
 ﻿using Domain.Contracts;
-using HospitabilityPro.Model;
+using DTO.ExtraServiceDTO;
 using HumanResourceProject.Models;
 using System;
 using System.Collections.Generic;
@@ -11,14 +11,24 @@ namespace Domain.Concrete
 {
     public class ExtraServiceDomain : IExtraServiceDomain
     {
+        private readonly HospitalityPRO_DbContext _context;
+        public ExtraServiceDomain (HospitalityPRO_DbContext context)
+        {
+            _context = context;
+        }
         public IEnumerable<ExtraService> GetAllServices()
         {
             return new List<ExtraService>();
         }
 
-        public ExtraService GetExtraServiceById(int serviceId)
+        public async Task<ExtraService> GetExtraServiceById(int serviceID)
         {
-            throw new NotImplementedException();
+            var service = await _context.ExtraServices.FindAsync(serviceID);
+            return service;
         }
+        //public async Task<ExtraServiceDTO> UpdateExtraService(int serviceId, ExtraServiceDTO request)
+        //{
+
+        //}
     }
 }

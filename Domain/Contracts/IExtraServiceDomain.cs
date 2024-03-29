@@ -1,4 +1,4 @@
-﻿using HospitabilityPro.Model;
+﻿using DTO.ExtraServiceDTO;
 using HumanResourceProject.Models;
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,7 @@ namespace Domain.Contracts
     public interface IExtraServiceDomain
     {
         IEnumerable<ExtraService> GetAllServices();
-        ExtraService GetExtraServiceById(int serviceId);
+        Task<ExtraService> GetExtraServiceById(int serviceId);
+        //Task<ExtraServiceDTO> UpdateExtraService(int serviceId, ExtraServiceDTO request);
     }
 }

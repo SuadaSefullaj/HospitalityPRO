@@ -1,4 +1,6 @@
-﻿using HumanResourceProject.Models;
+﻿using DTO.ExtraServiceDTO;
+using HumanResourceProject.Models;
+using LamarCodeGeneration.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +12,11 @@ namespace HumanResourceProject.Controllers
     {
         private readonly ExtraService _services;
         private readonly HospitalityPRO_DbContext _dbContext;
-        public ExtraServiceController(HospitalityPRO_DbContext dBContext)
+
+        public ExtraServiceController(HospitalityPRO_DbContext dbContext,ExtraService services)
         {
-            _dbContext = dBContext;
+            _dbContext = dbContext;
+            _services = services;
         }
 
 
@@ -37,20 +41,27 @@ namespace HumanResourceProject.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddExtraService(ExtraService extraService)
+        public async Task<ActionResult> AddExtraService(ExtraServiceDTO request)
         {
-            _dbContext.ExtraServices.Add(extraService);
+            _dbContext.ExtraServices.Add(new ExtraService { Type = request.Type });
             _dbContext.SaveChanges();
-            return Ok();
+            if (request == null)
+            {
+                return BadRequest("Failed to add a new Extra Service!!!");
+            }
+            else
+            {
+                return Ok(request);
+            }
         }
 
-        [HttpPut]
-        public async Task<ActionResult> Update(int serviceId, ExtraService extraService)
-        {
-            _dbContext.ExtraServices.Update(extraService);
-            _dbContext.SaveChanges();
-            return Ok();
-        }
+        //[HttpPut]
+        //public async Task<ActionResult> Update(int serviceId, ExtraServiceDTO request)
+        //{
+        //    var result = await _dbContext.ExtraServices.UpdateExtraService(serviceId, request);
+        //    _dbContext.SaveChanges();
+        //    return Ok();
+        //}
         [HttpDelete]
         public async Task<ActionResult> Delete(int serviceId)
         {
