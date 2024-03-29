@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using Domain.ClientService;
+using Domain.Contracts;
 using DTO;
+using Helpers;
 using HumanResourceProject.Models;
 using LamarCodeGeneration.Frames;
 using Microsoft.AspNetCore.Authorization;

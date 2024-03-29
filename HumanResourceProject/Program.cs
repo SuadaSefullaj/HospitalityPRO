@@ -1,8 +1,11 @@
-using DAL.ClientRepository;
+using DAL.Concrete;
+using DAL.Contracts;
 using DI;
-using Domain.ClientService;
+using Domain.Concrete;
+using Domain.Contracts;
 using Domain.Mappings;
 using Entities.Models;
+using Helpers;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;

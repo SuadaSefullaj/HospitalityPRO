@@ -2,7 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HumanResourceProject.Models;
-using DAL.ClientRepository;
+using Microsoft.AspNetCore.Authorization;
+using DAL.Contracts;
 
 namespace HumanResourceProject.Controllers
 {
@@ -17,7 +18,8 @@ namespace HumanResourceProject.Controllers
             _clientRepository = clientRepository;
         }
 
-        [HttpGet("getAllClients")] 
+        [HttpGet("getAllClients")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<Client>>> GetAllClients()
         {
             try

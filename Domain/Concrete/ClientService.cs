@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
+using Domain.Contracts;
 using DTO;
+using Helpers;
 using HumanResourceProject.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using StructureMap;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.ClientService
+namespace Domain.Concrete
 {
     public class ClientService : IClientService
     {
@@ -34,7 +34,7 @@ namespace Domain.ClientService
             if (_dbContext.Clients.Any(c => c.Email == request.Email))
             {
                 throw new InvalidOperationException("An account with this email already exists.");
-              
+
             }
             // Check if the user is under 18
             var underage = DateTime.Today.AddYears(-18);
@@ -92,7 +92,7 @@ namespace Domain.ClientService
 
         public async Task<Client> AuthenticateClientAsync(string email, string password)
         {
-          
+
             var client = await _dbContext.Clients.FirstOrDefaultAsync(c => c.Email == email);
 
             if (client == null)

@@ -1,7 +1,6 @@
 ﻿using Entities.Models;
 using HumanResourceProject.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -13,7 +12,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.ClientService
+namespace Helpers
 {
     public class TokenService
     {
@@ -28,7 +27,7 @@ namespace Domain.ClientService
 
         public string CreateToken(Client client)
         {
-            List<Claim> claims = new ()
+            List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.Email, client.Email),
                 new Claim(ClaimTypes.Role, client.Role)

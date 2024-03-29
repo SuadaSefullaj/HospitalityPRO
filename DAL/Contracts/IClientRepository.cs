@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.ClientRepository
+namespace DAL.Contracts
 {
     public interface IClientRepository
     {
