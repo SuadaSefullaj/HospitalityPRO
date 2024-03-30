@@ -1,6 +1,8 @@
-﻿using Domain.Contracts;
+﻿using DAL.Concrete;
+using Domain.Contracts;
 using DTO.ExtraServiceDTO;
 using HumanResourceProject.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,21 +13,26 @@ namespace Domain.Concrete
 {
     public class ExtraServiceDomain : IExtraServiceDomain
     {
-        private readonly HospitalityPRO_DbContext _context;
+        private readonly HospitalityPRO_DbContext _dbContext;
         public ExtraServiceDomain (HospitalityPRO_DbContext context)
         {
-            _context = context;
+            _dbContext = context;
         }
-        public IEnumerable<ExtraService> GetAllServices()
+        public async Task<ExtraService> AddExtraService(ExtraServiceDTO request)
         {
-            return new List<ExtraService>();
+            var extraService = new ExtraService
+            {
+                Type = request.Type,
+                Price = request.Price,
+                Description = request.Description
+            };
+
+             var addedExtraService = _dbContext.ExtraServices.Add(extraService);
+            await _dbContext.SaveChangesAsync();
+
+            return addedExtraService.Entity;
         }
 
-        public async Task<ExtraService> GetExtraServiceById(int serviceID)
-        {
-            var service = await _context.ExtraServices.FindAsync(serviceID);
-            return service;
-        }
         //public async Task<ExtraServiceDTO> UpdateExtraService(int serviceId, ExtraServiceDTO request)
         //{
 

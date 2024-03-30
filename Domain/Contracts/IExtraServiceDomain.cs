@@ -10,8 +10,7 @@ namespace Domain.Contracts
 {
     public interface IExtraServiceDomain
     {
-        IEnumerable<ExtraService> GetAllServices();
-        Task<ExtraService> GetExtraServiceById(int serviceId);
+       Task<ExtraService> AddExtraService(ExtraServiceDTO request);
         //Task<ExtraServiceDTO> UpdateExtraService(int serviceId, ExtraServiceDTO request);
     }
 }
