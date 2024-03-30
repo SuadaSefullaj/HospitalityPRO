@@ -15,10 +15,11 @@ namespace HumanResourceProject.Controllers
         private readonly HospitalityPRO_DbContext _dbContext;
         private readonly IExtraServicesRepository _extraServicesRepository;
 
-        public ExtraServiceController(HospitalityPRO_DbContext dbContext,ExtraService services)
+        public ExtraServiceController(HospitalityPRO_DbContext dbContext,ExtraService services, IExtraServicesRepository extraServicesRepository)
         {
             _dbContext = dbContext;
             _services = services;
+            _extraServicesRepository = extraServicesRepository; 
         }
 
 
