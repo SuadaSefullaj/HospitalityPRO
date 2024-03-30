@@ -1,4 +1,5 @@
-﻿using DTO.ExtraServiceDTO;
+﻿using DAL.Contracts;
+using DTO.ExtraServiceDTO;
 using HumanResourceProject.Models;
 using LamarCodeGeneration.Util;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,7 @@ namespace HumanResourceProject.Controllers
     {
         private readonly ExtraService _services;
         private readonly HospitalityPRO_DbContext _dbContext;
+        private readonly IExtraServicesRepository _extraServicesRepository;
 
         public ExtraServiceController(HospitalityPRO_DbContext dbContext,ExtraService services)
         {
@@ -21,15 +23,17 @@ namespace HumanResourceProject.Controllers
 
 
 
-        [HttpGet]
-        public async Task<ActionResult> GetAllServices()
+        [HttpGet("getAllServices")]
+
+        public async Task<ActionResult<IEnumerable<ExtraService>>> GetAllServices()
         {
-            var extraService = _services.GetType();
+            var extraService = await _extraServicesRepository.GetAllServices();
             return Ok(extraService);
         }
-        public async Task<ActionResult> GetExtraServiceById(int serviceId)
+        [HttpGet("{serviceId }")]
+        public async Task<ActionResult<ExtraService>> GetExtraServiceById(int serviceId)
         {
-            var service = await _dbContext.ExtraServices.FindAsync(serviceId);
+            var service = await _extraServicesRepository.GetExtraServicesById(serviceId);
             if (service == null)
             {
                 return NotFound();
@@ -40,18 +44,17 @@ namespace HumanResourceProject.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<ActionResult> AddExtraService(ExtraServiceDTO request)
+        [HttpPost("{ addExtraService }")]
+        public async Task<ActionResult<ExtraService>> AddExtraService(ExtraServiceDTO request)
         {
-            _dbContext.ExtraServices.Add(new ExtraService { Type = request.Type });
-            _dbContext.SaveChanges();
+            var result = await _extraServicesRepository.AddExtraService(request);
             if (request == null)
             {
-                return BadRequest("Failed to add a new Extra Service!!!");
+                 return BadRequest("Failed to add a new Extra Service!!!");
             }
             else
             {
-                return Ok(request);
+                return Ok(result);
             }
         }
 
@@ -61,22 +64,22 @@ namespace HumanResourceProject.Controllers
         //    var result = await _dbContext.ExtraServices.UpdateExtraService(serviceId, request);
         //    _dbContext.SaveChanges();
         //    return Ok();
+        ////}
+        //[HttpDelete]
+        //public async Task<ActionResult<ExtraService>> Delete(int serviceId)
+        //{
+        //    var service = _dbContext.ExtraServices.FirstOrDefault(x => x.ServicesId == serviceId);
+        //    if (service != null)
+        //    {
+        //        _dbContext.ExtraServices.Remove(service);
+        //        _dbContext.SaveChanges();
+        //        return Ok();
+        //    }
+        //    else
+        //    {
+        //        return NotFound();
+        //    }
         //}
-        [HttpDelete]
-        public async Task<ActionResult> Delete(int serviceId)
-        {
-            var service = _dbContext.ExtraServices.FirstOrDefault(x => x.ServicesId == serviceId);
-            if (service != null)
-            {
-                _dbContext.ExtraServices.Remove(service);
-                _dbContext.SaveChanges();
-                return Ok();
-            }
-            else
-            {
-                return NotFound();
-            }
-        }
 
 
 
