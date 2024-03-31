@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using DTO.ExtraServiceDTO;
 using DTO.UserDTO;
 using Entities.Models;
+using HumanResourceProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +17,7 @@ namespace Domain.Mappings
         public GeneralProfile()
         {
            CreateMap<User, UserDTO>().ReverseMap();
-
+           CreateMap<ExtraServiceDTO, ExtraService>();
         }
 
         #endregion
