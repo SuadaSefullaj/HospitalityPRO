@@ -10,24 +10,24 @@ namespace HospitalityPRO.Controllers
     [ApiController]
     public class HospitalityPRO_Controller : ControllerBase
     {
-        private readonly HospitalityPRO_DbContext _context;
+        private readonly HospitalityPRO_DbContext _dbContext;
 
         public HospitalityPRO_Controller(HospitalityPRO_DbContext context)
         {
-            _context = context;
+            _dbContext = context;
         }
 
         [HttpGet]
 
         public async Task<ActionResult<List<Client>>> GetHospitality()
         {
-            return Ok(await _context.Clients.ToListAsync());
-            return Ok(await _context.Reservations.ToListAsync());
-            return Ok(await _context.Rooms.ToListAsync());
-            return Ok(await _context.RoomTypes.ToListAsync());
-            return Ok(await _context.ReservationServices.ToListAsync());
-            return Ok(await _context.ExtraServices.ToListAsync());
-            return Ok(await _context.Notifications.ToListAsync());
+            return Ok(await _dbContext.Clients.ToListAsync());
+            return Ok(await _dbContext.Reservations.ToListAsync());
+            return Ok(await _dbContext.Rooms.ToListAsync());
+            return Ok(await _dbContext.RoomTypes.ToListAsync());
+            return Ok(await _dbContext.ReservationServices.ToListAsync());
+            return Ok(await _dbContext.ExtraServices.ToListAsync());
+            return Ok(await _dbContext.Notifications.ToListAsync());
         }
     }
 }

@@ -15,16 +15,16 @@ namespace HumanResourceProject.Controllers
         private readonly HospitalityPRO_DbContext _dbContext;
         private readonly IExtraServicesRepository _extraServicesRepository;
 
-        public ExtraServiceController(HospitalityPRO_DbContext dbContext,ExtraService services, IExtraServicesRepository extraServicesRepository)
+        public ExtraServiceController(HospitalityPRO_DbContext dbContext, ExtraService services, IExtraServicesRepository extraServicesRepository)
         {
             _dbContext = dbContext;
             _services = services;
-            _extraServicesRepository = extraServicesRepository; 
+            _extraServicesRepository = extraServicesRepository;
         }
 
 
 
-        [HttpGet("getAllServices")]
+        [HttpGet("GetAllServices")]
 
         public async Task<ActionResult<IEnumerable<ExtraService>>> GetAllServices()
         {
@@ -51,7 +51,7 @@ namespace HumanResourceProject.Controllers
             var result = await _extraServicesRepository.AddExtraService(request);
             if (request == null)
             {
-                 return BadRequest("Failed to add a new Extra Service!!!");
+                return BadRequest("Failed to add a new Extra Service!!!");
             }
             else
             {
@@ -59,14 +59,21 @@ namespace HumanResourceProject.Controllers
             }
         }
 
-        //[HttpPut]
-        //public async Task<ActionResult> Update(int serviceId, ExtraServiceDTO request)
-        //{
-        //    var result = await _dbContext.ExtraServices.UpdateExtraService(serviceId, request);
-        //    _dbContext.SaveChanges();
-        //    return Ok();
-        ////}
-        //[HttpDelete]
+        [HttpPut("{ serviceId }")]
+        public async Task<ActionResult> Update(int serviceId, ExtraServiceDTO request)
+        {
+            if (serviceId != request.ServiceId)
+            {
+                return BadRequest("ID mismatch! ");
+            }
+            var result = await _extraServicesRepository.UpdateExtraService(serviceId, request);
+            if (request == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+        //[HttpDelete("{ serviceId }")]
         //public async Task<ActionResult<ExtraService>> Delete(int serviceId)
         //{
         //    var service = _dbContext.ExtraServices.FirstOrDefault(x => x.ServicesId == serviceId);
