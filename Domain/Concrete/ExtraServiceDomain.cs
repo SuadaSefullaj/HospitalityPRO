@@ -33,9 +33,19 @@ namespace Domain.Concrete
             return addedExtraService.Entity;
         }
 
-        //public async Task<ExtraServiceDTO> UpdateExtraService(int serviceId, ExtraServiceDTO request)
-        //{
+        public async Task<ExtraService> UpdateExtraService(int serviceId, ExtraServiceDTO request)
+        {
+            var extraService = new ExtraService()
+            {
+                Type = request.Type,
+                Price = request.Price,
+                Description = request.Description
+            };
 
-        //}
+            var updatedExtraService = _dbContext.ExtraServices.Update(extraService);
+            await _dbContext.SaveChangesAsync();
+
+            return updatedExtraService.Entity;
+        }
     }
 }

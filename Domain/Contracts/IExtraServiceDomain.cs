@@ -11,6 +11,6 @@ namespace Domain.Contracts
     public interface IExtraServiceDomain
     {
        Task<ExtraService> AddExtraService(ExtraServiceDTO request);
-        //Task<ExtraServiceDTO> UpdateExtraService(int serviceId, ExtraServiceDTO request);
+       Task<ExtraService> UpdateExtraService(int serviceId, ExtraServiceDTO request);
     }
 }
