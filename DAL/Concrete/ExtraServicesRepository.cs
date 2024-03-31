@@ -31,12 +31,7 @@ namespace DAL.Concrete
         }
         public async Task<ExtraService> AddExtraService(ExtraServiceDTO request)
         {
-            var extraService = new ExtraService
-            {
-                Type = request.Type,
-                Price = request.Price,
-                Description = request.Description
-            };
+            var extraService = _mapper.Map<ExtraService>(request);
 
             var addedExtraService = _dbContext.ExtraServices.Add(extraService);
             await _dbContext.SaveChangesAsync();
@@ -44,5 +39,12 @@ namespace DAL.Concrete
             return addedExtraService.Entity;
         }
 
+        public async Task<ExtraService> UpdateExtraService(int serviceId, ExtraServiceDTO request)
+        {
+            var existingService = _dbContext.ExtraServices.FirstOrDefault(c => c.ServicesId == serviceId);
+            _mapper.Map(existingService, request);
+            await _dbContext.SaveChangesAsync();
+            return existingService;
+        }
     }
 }

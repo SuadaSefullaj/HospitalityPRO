@@ -10,9 +10,9 @@ namespace DAL.Contracts
 {
     public interface IExtraServicesRepository
     {
-        Task<ExtraService> AddExtraService(ExtraServiceDTO request);
         Task<IEnumerable<ExtraService>> GetAllServices();
-        Task<ExtraService> GetExtraServicesById(int serviceId);
-
+        Task<ExtraService> GetExtraServicesById(int serviceId); 
+        Task<ExtraService> AddExtraService(ExtraServiceDTO request);
+        Task<ExtraService> UpdateExtraService(int serviceId, ExtraServiceDTO request);
     }
 }
