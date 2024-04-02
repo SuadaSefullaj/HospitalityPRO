@@ -6,6 +6,7 @@ using Domain.Contracts;
 using Domain.Mappings;
 using Entities.Models;
 using Helpers;
+using HumanResourceProject.Models;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -26,8 +27,7 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddScoped < IClientService, ClientService > ();
-builder.Services.AddScoped<IClientRepository, ClientRepository>();
+
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(options =>

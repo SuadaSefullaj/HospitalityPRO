@@ -15,11 +15,11 @@ namespace DAL.Concrete
         {
         }
 
-        public User GetById(Guid id)
-        {
-            var user = context.Where(a => a.UserId == id).FirstOrDefault();
-            return user;
-        }
+        //public User GetById(Guid id)
+        //{
+        //    var user = context.Where(a => a.UserId == id).FirstOrDefault();
+        //    return user;
+        //}
 
 
     }

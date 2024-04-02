@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using DAL.UoW;
 using Domain.Contracts;
 using DTO;
 using Helpers;
 using HumanResourceProject.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using StructureMap;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,23 +15,20 @@ using System.Threading.Tasks;
 
 namespace Domain.Concrete
 {
-    public class ClientService : IClientService
+    public class ClientService : DomainBase, IClientService
     {
-
         private readonly HospitalityPRO_DbContext _dbContext;
-        private readonly PasswordService _passwordService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IMapper _mapper;
+        protected readonly PasswordService _passwordService;
 
-        public ClientService(IHttpContextAccessor httpContextAccessor, HospitalityPRO_DbContext dbContext, PasswordService passwordService, IMapper mapper)
+        public ClientService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, PasswordService passwordService, HospitalityPRO_DbContext dbContext) : base(unitOfWork, mapper, httpContextAccessor)
         {
-            _httpContextAccessor = httpContextAccessor;
-            _dbContext = dbContext;
             _passwordService = passwordService;
-            _mapper = mapper;
+            _dbContext = dbContext;
         }
-        //----------------------------------------------------------------------REGISTER CLIENT-----------------------------------------------------------------------------
-        public async Task<Client> RegisterClientAsync(ClientRegistrationDTO request)
+
+     
+  //----------------------------------------------------------------------REGISTER CLIENT-----------------------------------------------------------------------------
+            public async Task<Client> RegisterClientAsync(ClientRegistrationDTO request)
         {
             if (_dbContext.Clients.Any(c => c.Email == request.Email))
             {
