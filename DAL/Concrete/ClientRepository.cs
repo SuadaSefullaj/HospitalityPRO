@@ -1,6 +1,7 @@
 ﻿using DAL.Contracts;
 using HumanResourceProject.Models;
 using Microsoft.EntityFrameworkCore;
+using StructureMap;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,15 +19,16 @@ namespace DAL.Concrete
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Client>> GetAllClientsAsync()
+        public IEnumerable<Client> GetAllClients()
         {
-            return await _dbContext.Clients.ToListAsync();
+            return _dbContext.Clients.ToList();
         }
 
-        public async Task<Client> GetClientByIdAsync(int id)
+        public Client GetClientById(int id)
         {
-            return await _dbContext.Clients.FirstOrDefaultAsync(c => c.ClientId == id)
-                 ?? throw new Exception("Client not found"); ;
+            var client = _dbContext.Clients.FirstOrDefault(c => c.ClientId == id);
+            return client;
         }
+
     }
 }

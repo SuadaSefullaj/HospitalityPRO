@@ -20,11 +20,11 @@ namespace HumanResourceProject.Controllers
 
         [HttpGet("getAllClients")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<Client>>> GetAllClients()
+        public  ActionResult<IEnumerable<Client>> GetAllClients()
         {
             try
             {
-                var clients = await _clientRepository.GetAllClientsAsync();
+                var clients =  _clientRepository.GetAllClients();
                 return Ok(clients);
             }
             catch (Exception ex)
@@ -34,11 +34,11 @@ namespace HumanResourceProject.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Client>> GetClientById(int id)
+        public  ActionResult<Client> GetClientById(int id)
         {
             try
             {
-                var client = await _clientRepository.GetClientByIdAsync(id);
+                var client =  _clientRepository.GetClientById(id);
                 if (client == null)
                 {
                     return NotFound(); 

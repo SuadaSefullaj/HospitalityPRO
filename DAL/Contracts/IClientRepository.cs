@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Contracts
 {
-    public interface IClientRepository
+    public interface IClientRepository 
     {
-        Task<IEnumerable<Client>> GetAllClientsAsync();
-        Task<Client> GetClientByIdAsync(int id);
-
+        IEnumerable<Client> GetAllClients();
+        Client GetClientById(int id);
     }
 }

@@ -24,12 +24,11 @@ namespace HumanResourceProject.Controllers
         public static Client client = new();
         private readonly IClientService _clientService;
         private readonly TokenService _tokenService;
-        private readonly PasswordService _passwordService;
         private readonly IMapper _mapper;
         private readonly HospitalityPRO_DbContext _dbContext;
 
 
-        public AuthController(IClientService clientService, TokenService tokenService, PasswordService passwordService, IMapper mapper, HospitalityPRO_DbContext dbContext)
+        public AuthController(IClientService clientService, TokenService tokenService, IMapper mapper, HospitalityPRO_DbContext dbContext)
         {
             _clientService = clientService;
             _tokenService = tokenService;

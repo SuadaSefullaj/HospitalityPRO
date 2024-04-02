@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using DAL.Contracts;
 using DAL.UoW;
 using Domain.Contracts;
 using DTO;
+using DTO.UserDTO;
+using Entities.Models;
 using Helpers;
 using HumanResourceProject.Models;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +21,7 @@ namespace Domain.Concrete
     public class ClientService : DomainBase, IClientService
     {
         private readonly HospitalityPRO_DbContext _dbContext;
+        private IClientRepository clientRepository => _unitOfWork.GetRepository<IClientRepository>();
         protected readonly PasswordService _passwordService;
 
         public ClientService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, PasswordService passwordService, HospitalityPRO_DbContext dbContext) : base(unitOfWork, mapper, httpContextAccessor)
