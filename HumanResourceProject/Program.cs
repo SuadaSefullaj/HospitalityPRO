@@ -11,6 +11,10 @@ builder.Services.AddDbContext<RecrutimentContext>(options => options.UseSqlServe
 
 
 
+
+// Add controllers, middleware, etc.
+
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -47,6 +51,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
 
 app.UseAuthorization();
 

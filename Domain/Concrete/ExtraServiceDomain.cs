@@ -1,7 +1,11 @@
-﻿using DAL.Concrete;
+﻿using AutoMapper;
+using DAL.Concrete;
+using DAL.Contracts;
+using DAL.UoW;
 using Domain.Contracts;
 using DTO.ExtraServiceDTO;
 using HumanResourceProject.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,41 +15,57 @@ using System.Threading.Tasks;
 
 namespace Domain.Concrete
 {
-    public class ExtraServiceDomain : IExtraServiceDomain
+    internal class ExtraServiceDomain : DomainBase, IExtraServiceDomain
     {
-        private readonly HospitalityPRO_DbContext _dbContext;
-        public ExtraServiceDomain (HospitalityPRO_DbContext context)
+        public ExtraServiceDomain(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, mapper, httpContextAccessor)
         {
-            _dbContext = context;
         }
-        public async Task<ExtraService> AddExtraService(ExtraServiceDTO request)
+        private IExtraServicesRepository extraServicesRepository => _unitOfWork.GetRepository<IExtraServicesRepository>();
+
+        public async ExtraService AddExtraService(ExtraServiceDTO request)
         {
-            var extraService = new ExtraService
-            {
-                Type = request.Type,
-                Price = request.Price,
-                Description = request.Description
-            };
+            //var extraService = new ExtraService
+            //{
+            //    Type = request.Type,
+            //    Price = request.Price,
+            //    Description = request.Description
+            //};
 
-             var addedExtraService = _dbContext.ExtraServices.Add(extraService);
-            await _dbContext.SaveChangesAsync();
+            // var addedExtraService = _dbContext.ExtraServices.Add(extraService);
+            //await _dbContext.SaveChangesAsync();
 
-            return addedExtraService.Entity;
+           // return addedExtraService.Entity;
+           return null;
         }
 
-        public async Task<ExtraService> UpdateExtraService(int serviceId, ExtraServiceDTO request)
+       
+        public async Task<ExtraServiceDTO> UpdateExtraService(int serviceId, ExtraServiceDTO request)
         {
-            var extraService = new ExtraService()
-            {
-                Type = request.Type,
-                Price = request.Price,
-                Description = request.Description
-            };
+            //var updatedExtraService = await _dbContext.ExtraServices.FindAsync(serviceId);
 
-            var updatedExtraService = _dbContext.ExtraServices.Update(extraService);
-            await _dbContext.SaveChangesAsync();
+            //updatedExtraService.Type = request.Type;
+            //updatedExtraService.Price = request.Price;
+            //updatedExtraService.Description = request.Description;
 
-            return updatedExtraService.Entity;
+            //await _dbContext.SaveChangesAsync();
+
+            //return request;
+            return null;
+        }
+        public async Task<bool> DeleteExtraService(Guid serviceId)
+        {
+            //   var extraServicesRepository = await _dbContext.ExtraServices.FindAsync(serviceId);
+            extraServicesRepository.Remove(serviceId);
+            return true;
+
+        }
+
+        public ExtraServiceDTO GetByServiceId(int serviceId)
+        {
+            ExtraService currentData = extraServicesRepository.GetExtraServicesById(serviceId);
+
+            ExtraServiceDTO mapper = _mapper.Map<ExtraServiceDTO>(currentData);
+            return mapper;
         }
     }
 }

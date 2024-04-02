@@ -16,6 +16,8 @@ namespace DAL.DI
             IncludeRegistry<UnitOfWorkRegistry>();
 
             For<IUserRepository>().Use<UserRepository>();
+            For<IExtraServicesRepository>().Use<ExtraServicesRepository>();
+
         }
 
 
