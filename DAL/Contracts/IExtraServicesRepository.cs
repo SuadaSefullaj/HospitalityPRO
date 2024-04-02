@@ -1,4 +1,5 @@
 ﻿using DTO.ExtraServiceDTO;
+using Entities.Models;
 using HumanResourceProject.Models;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Contracts
 {
-    public interface IExtraServicesRepository
+    public interface IExtraServicesRepository : IRepository<ExtraService, Guid>
     {
-        Task<IEnumerable<ExtraService>> GetAllServices();
-        Task<ExtraService> GetExtraServicesById(int serviceId); 
-        Task<ExtraService> AddExtraService(ExtraServiceDTO request);
-        Task<ExtraService> UpdateExtraService(int serviceId, ExtraServiceDTO request);
+    ExtraService GetExtraServicesById(int serviceId); 
+
     }
 }
