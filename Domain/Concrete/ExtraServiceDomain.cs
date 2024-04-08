@@ -36,7 +36,7 @@ namespace Domain.Concrete
             ExtraService extraService = _mapper.Map<ExtraService>(request);
             
             ExtraService addedExtraService = extraServicesRepository.Add(extraService);
-            _unitOfWork.Save();
+            extraServicesRepository.PersistChangesToTrackedEntities();
             return addedExtraService;
         }
 
