@@ -24,39 +24,40 @@ namespace HumanResourceProject.Controllers
 
         [HttpGet("GetAllServices")]
 
-        public async Task<ActionResult<IEnumerable<ExtraService>>> GetAllServices()
+        public ActionResult<IEnumerable<ExtraService>> GetAllServices()
         {
-            return null;
-
+            var data = _extraServiceDomain.GetAllExtraServices();
+            return Ok(data);
         }
         [HttpGet("{serviceId }")]
-        public async Task<ActionResult<ExtraService>> GetExtraServiceById(int serviceId)
+        public ActionResult<ExtraService> GetExtraServiceById(int serviceId)
         {
            var data = _extraServiceDomain.GetByServiceId(serviceId);
             return Ok(data);
         }
 
         [HttpPost("{ addExtraService }")]
-        public async Task<ActionResult<ExtraService>> AddExtraService(ExtraServiceDTO request)
+        public ActionResult<ExtraService> AddExtraService(ExtraServiceDTO request)
         {
-            return null;
+            var data = _extraServiceDomain.AddExtraService(request);
+            return Ok(data);
 
         }
 
         [HttpPut("{ serviceId }")]
-        public async Task<ActionResult<ExtraServiceDTO>> Update(int serviceId, ExtraServiceDTO request)
+        public ActionResult<ExtraServiceDTO> Update(int serviceId, ExtraServiceDTO request)
         {
-            return null;
+            var data = _extraServiceDomain.UpdateExtraService(serviceId, request);
+            return Ok(data);
 
         }
         [HttpDelete("{ serviceId }")]
-        public async Task<ActionResult<ExtraService>> DeleteExtraService(int serviceId)
+        public ActionResult<ExtraService> DeleteExtraService(int serviceId)
         {
-            return null;
+            var data = _extraServiceDomain.DeleteExtraService(serviceId);
+            return Ok(data);
 
         }
-
-
-
+        
     }
 }

@@ -21,51 +21,46 @@ namespace Domain.Concrete
         {
         }
         private IExtraServicesRepository extraServicesRepository => _unitOfWork.GetRepository<IExtraServicesRepository>();
-
-        public async ExtraService AddExtraService(ExtraServiceDTO request)
-        {
-            //var extraService = new ExtraService
-            //{
-            //    Type = request.Type,
-            //    Price = request.Price,
-            //    Description = request.Description
-            //};
-
-            // var addedExtraService = _dbContext.ExtraServices.Add(extraService);
-            //await _dbContext.SaveChangesAsync();
-
-           // return addedExtraService.Entity;
-           return null;
-        }
-
-       
-        public async Task<ExtraServiceDTO> UpdateExtraService(int serviceId, ExtraServiceDTO request)
-        {
-            //var updatedExtraService = await _dbContext.ExtraServices.FindAsync(serviceId);
-
-            //updatedExtraService.Type = request.Type;
-            //updatedExtraService.Price = request.Price;
-            //updatedExtraService.Description = request.Description;
-
-            //await _dbContext.SaveChangesAsync();
-
-            //return request;
-            return null;
-        }
-        public async Task<bool> DeleteExtraService(Guid serviceId)
-        {
-            //   var extraServicesRepository = await _dbContext.ExtraServices.FindAsync(serviceId);
-            extraServicesRepository.Remove(serviceId);
-            return true;
-
-        }
-
         public ExtraServiceDTO GetByServiceId(int serviceId)
         {
             ExtraService currentData = extraServicesRepository.GetExtraServicesById(serviceId);
-
-            ExtraServiceDTO mapper = _mapper.Map<ExtraServiceDTO>(currentData);
-            return mapper;
+            return _mapper.Map<ExtraServiceDTO>(currentData);
         }
+        public IList<ExtraServiceDTO> GetAllExtraServices()
+        {
+            IEnumerable<ExtraService> data = extraServicesRepository.GetAll();
+            return _mapper.Map<IList<ExtraServiceDTO>>(data);
+        }
+        public ExtraService AddExtraService(ExtraServiceDTO request)
+        {
+            ExtraService extraService = _mapper.Map<ExtraService>(request);
+            
+            ExtraService addedExtraService = extraServicesRepository.Add(extraService);
+            _unitOfWork.Save();
+            return addedExtraService;
+        }
+
+       
+        public bool UpdateExtraService(int serviceId, ExtraServiceDTO request)
+        {
+            var currentData = extraServicesRepository.Find(x => x.ServicesId == serviceId).FirstOrDefault();
+            if (currentData != null)
+            {
+                _mapper.Map(request, currentData);
+                extraServicesRepository.Update(currentData);
+                _unitOfWork.Save();
+                return true;
+            }
+            return false;
+        }
+        public bool DeleteExtraService(int serviceId)
+        {
+            var currentData = extraServicesRepository.Find(x => x.ServicesId == serviceId).FirstOrDefault();
+            extraServicesRepository.Remove(currentData);
+            _unitOfWork.Save();
+            return true;
+        }
+
+        
     }
 }

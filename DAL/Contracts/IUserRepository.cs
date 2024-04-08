@@ -9,6 +9,6 @@ namespace DAL.Contracts
 {
     public interface IUserRepository: IRepository<User, Guid>
     {
-        User GetById(Guid id);
+        User GetByID(Guid id);
     }
 }

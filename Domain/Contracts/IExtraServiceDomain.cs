@@ -10,9 +10,11 @@ namespace Domain.Contracts
 {
     public interface IExtraServiceDomain
     {
-       Task<ExtraService> AddExtraService(ExtraServiceDTO request);
-       Task<ExtraServiceDTO> UpdateExtraService(int serviceId, ExtraServiceDTO request);
-       Task<bool> DeleteExtraService(int serviceId);
-        ExtraServiceDTO GetByServiceId(int serviceId);
+       ExtraService AddExtraService(ExtraServiceDTO request);
+       bool UpdateExtraService(int serviceId, ExtraServiceDTO request);
+       bool DeleteExtraService(int serviceId);
+       ExtraServiceDTO GetByServiceId(int serviceId);
+       IList<ExtraServiceDTO> GetAllExtraServices();
+
     }
 }

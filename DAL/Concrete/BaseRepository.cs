@@ -1,4 +1,5 @@
 ﻿using DAL.Contracts;
+using HumanResourceProject.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,10 @@ namespace DAL.Concrete
 {
     internal class BaseRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class
     {
-        protected readonly DbContext db;
+        protected readonly HospitalityPRO_DbContext db;
         protected DbSet<TEntity> context;
 
-        public BaseRepository(DbContext dbContext)
+        public BaseRepository(HospitalityPRO_DbContext dbContext)
         {
             db = dbContext;
             context = db.Set<TEntity>();

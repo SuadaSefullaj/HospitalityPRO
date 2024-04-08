@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Entities.Models;
+using HumanResourceProject.Models;
 using Lamar;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.UoW
 {
@@ -12,9 +14,9 @@ namespace DAL.UoW
     {
         private readonly IContainer _container;
 
-        private readonly RecrutimentContext _context;
+        private readonly HospitalityPRO_DbContext _context;
 
-        public UnitOfWork(IContainer container, RecrutimentContext context)
+        public UnitOfWork(IContainer container, HospitalityPRO_DbContext context)
         {
             _container = container;
             _context = context;
