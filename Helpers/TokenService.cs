@@ -27,10 +27,11 @@ namespace Helpers
 
         public string CreateToken(Client client)
         {
-            List<Claim> claims = new()
+            List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, client.Email),
-                new Claim(ClaimTypes.Role, client.Role)
+                new Claim("emailaddress", client.Email),
+                new Claim("name", client.Name),
+                new Claim("role", client.Role)
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
