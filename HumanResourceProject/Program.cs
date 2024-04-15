@@ -1,6 +1,8 @@
+using DAL.Browsing_Data;
 using DI;
 using Domain.Mappings;
 using Entities.Models;
+using HumanResourceProject.Models;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +20,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddScoped<IBrowsingDataRepository, BrowsingDataRepository>();
+builder.Services.AddDbContext<HospitalityPRO_DbContext>();
 builder.Services.AddAutoMapper(typeof(GeneralProfile));
 
 
