@@ -60,8 +60,6 @@ namespace HumanResourceProject.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(ClientLoginDTO request)
         {
-
-            // Authenticated client
    
             var client = await _clientService.AuthenticateClientAsync(request.Email, request.Password);
 
@@ -71,16 +69,16 @@ namespace HumanResourceProject.Controllers
             }
 
 
-            // Generate token
+         
             string token = _tokenService.CreateToken(client);
 
-            // Generate refresh token
+         
             var newRefreshToken = TokenService.GenerateRefreshToken();
 
-            // Set the client's ID on the refresh token
+        
             newRefreshToken.ClientId = client.ClientId;
 
-            // Set refresh token
+        
             _tokenService.SetRefreshToken(HttpContext, client, newRefreshToken);
 
             return Ok(new

@@ -111,7 +111,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
-app.UseAuthentication(); //middleware
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 

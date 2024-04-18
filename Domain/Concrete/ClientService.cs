@@ -39,17 +39,6 @@ namespace Domain.Concrete
                 throw new InvalidOperationException("An account with this email already exists.");
 
             }
-            // Check if the user is under 18
-            var underage = DateTime.Today.AddYears(-18);
-            if (request.Birth > underage)
-            {
-                throw new InvalidOperationException("You must be at least 18 years old to create an account.");
-            }
-
-            if (request.Password.Length < 8)
-            {
-                throw new InvalidOperationException("Password must be at least 8 characters long.");
-            }
 
             var client = _mapper.Map<Client>(request);
             _passwordService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -57,7 +46,6 @@ namespace Domain.Concrete
             client.PasswordHash = passwordHash;
             client.PasswordSalt = passwordSalt;
 
-            // Add the new client to the database
             _dbContext.Clients.Add(client);
             await _dbContext.SaveChangesAsync();
 
@@ -81,7 +69,6 @@ namespace Domain.Concrete
             admin.PasswordHash = passwordHash;
             admin.PasswordSalt = passwordSalt;
 
-            // Add the new admin to the database
             _dbContext.Clients.Add(admin);
             await _dbContext.SaveChangesAsync();
 
@@ -103,18 +90,18 @@ namespace Domain.Concrete
                 throw new Exception("Client with the provided email does not exist");
             }
 
-            // Verify the password using PasswordService
+   
             if (!_passwordService.VerifyPasswordHash(password, client.PasswordHash, client.PasswordSalt))
             {
                 throw new Exception("Password doesn't match");
             }
 
-            // Update the LastLogin attribute
             client.LastLogin = DateTime.Now;
             await _dbContext.SaveChangesAsync();
 
             return client;
         }
+
 
     }
 }
