@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using DAL.Concrete;
 using DAL.Contracts;
+using HumanResourceProject.Models;
 using Lamar;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.DI
 {
