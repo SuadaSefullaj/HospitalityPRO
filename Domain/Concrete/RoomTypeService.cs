@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DAL.Contracts;
 using Domain.Contracts;
 using DTO;
 using HumanResourceProject.Models;
@@ -12,47 +13,37 @@ namespace Domain.Concrete
 {
     public class RoomTypeService : IRoomTypeService
     {
-        private readonly HospitalityPRO_DbContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IRoomTypeRepository _roomTypeRepository;
 
-        public RoomTypeService(HospitalityPRO_DbContext dbContext, IMapper mapper)
+        public RoomTypeService(IRoomTypeRepository roomTypeRepository)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
+            _roomTypeRepository = roomTypeRepository;
         }
 
         public List<RoomTypeDTO> GetAllRoomTypes()
         {
-            var roomTypes = _dbContext.RoomTypes.ToList();
-            return _mapper.Map<List<RoomTypeDTO>>(roomTypes);
+            return _roomTypeRepository.GetAllRoomTypes();
         }
 
         public RoomTypeDTO GetRoomTypeById(int TypeId)
         {
-            var roomType = _dbContext.RoomTypes.FirstOrDefault(rt => rt.TypeId == TypeId);
-            return _mapper.Map<RoomTypeDTO>(roomType);
+            return _roomTypeRepository.GetRoomTypeById(TypeId);
         }
 
         public void CreateRoomType(RoomTypeDTO roomTypeDto)
         {
-            var roomType = _mapper.Map<RoomType>(roomTypeDto); 
-            _dbContext.RoomTypes.Add(roomType);
-            _dbContext.SaveChanges();
+            _roomTypeRepository.CreateRoomType(roomTypeDto);
         }
 
         public void UpdateRoomType(int TypeId, RoomTypeDTO roomTypeDto)
         {
-            var roomType = _dbContext.RoomTypes.Find(TypeId);
-            _mapper.Map(roomTypeDto, roomType);
-            _dbContext.SaveChanges();
+            _roomTypeRepository.UpdateRoomType(TypeId, roomTypeDto);
         }
 
         public void DeleteRoomType(int TypeId)
         {
-            var roomType = _dbContext.RoomTypes.Find(TypeId);
-            _dbContext.RoomTypes.Remove(roomType);
-            _dbContext.SaveChanges();
+            _roomTypeRepository.DeleteRoomType(TypeId);
         }
     }
 }
-   
+
