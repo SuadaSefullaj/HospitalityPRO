@@ -20,6 +20,7 @@ namespace DAL.DI
             For<IUserRepository>().Use<UserRepository>();
             For<IClientRepository>().Use<ClientRepository>();
             For<IRoomTypeRepository>().Use<RoomTypeRepository>();
+            For<IExtraServiceRepository>().Use<ExtraServiceRepository>();
         }
 
 

@@ -14,30 +14,36 @@ namespace Domain.Concrete
     public class RoomTypeService : IRoomTypeService
     {
         private readonly IRoomTypeRepository _roomTypeRepository;
+        private readonly IMapper _mapper;
 
-        public RoomTypeService(IRoomTypeRepository roomTypeRepository)
+        public RoomTypeService(IRoomTypeRepository roomTypeRepository, IMapper mapper)
         {
             _roomTypeRepository = roomTypeRepository;
+            _mapper = mapper;
         }
 
         public List<RoomTypeDTO> GetAllRoomTypes()
         {
-            return _roomTypeRepository.GetAllRoomTypes();
+            var roomTypes = _roomTypeRepository.GetAllRoomTypes();
+            return _mapper.Map<List<RoomTypeDTO>>(roomTypes);
         }
 
         public RoomTypeDTO GetRoomTypeById(int TypeId)
         {
-            return _roomTypeRepository.GetRoomTypeById(TypeId);
+            var roomType = _roomTypeRepository.GetRoomTypeById(TypeId);
+            return _mapper.Map<RoomTypeDTO>(roomType);
         }
 
-        public void CreateRoomType(RoomTypeDTO roomTypeDto)
+        public void CreateRoomType(RoomTypeDTO request)
         {
-            _roomTypeRepository.CreateRoomType(roomTypeDto);
+            var roomType = _mapper.Map<RoomType>(request);
+            _roomTypeRepository.CreateRoomType(request);
         }
 
-        public void UpdateRoomType(int TypeId, RoomTypeDTO roomTypeDto)
+        public void UpdateRoomType(int TypeId, RoomTypeDTO request)
         {
-            _roomTypeRepository.UpdateRoomType(TypeId, roomTypeDto);
+            var roomType = _mapper.Map<RoomType>(request);
+            _roomTypeRepository.UpdateRoomType(TypeId, request);
         }
 
         public void DeleteRoomType(int TypeId)
@@ -46,4 +52,3 @@ namespace Domain.Concrete
         }
     }
 }
-

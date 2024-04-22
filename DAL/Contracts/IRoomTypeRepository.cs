@@ -12,8 +12,10 @@ namespace DAL.Contracts
     {
         List<RoomTypeDTO> GetAllRoomTypes();
         RoomTypeDTO GetRoomTypeById(int TypeId);
-        void CreateRoomType(RoomTypeDTO roomTypeDto);
-        void UpdateRoomType(int TypeId, RoomTypeDTO roomTypeDto);
+        void CreateRoomType(RoomTypeDTO request);
+        void UpdateRoomType(int TypeId, RoomTypeDTO request);
         void DeleteRoomType(int TypeId);
+
+
     }
 }
