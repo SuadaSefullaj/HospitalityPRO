@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Contracts
 {
-    public interface IExtraServiceRepository
+    public interface IExtraServiceRepository : IRepository<ExtraService, int>
     {
 
         IEnumerable<ExtraService> GetAllExtraServices();

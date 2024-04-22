@@ -8,47 +8,42 @@ using System.Threading.Tasks;
 
 namespace DAL.Concrete
 {
-    public class ExtraServiceRepository : IExtraServiceRepository
+    internal class ExtraServiceRepository : BaseRepository<ExtraService, int>, IExtraServiceRepository
     {
-        private readonly HospitalityPRO_DbContext _dbContext;
-
-        public ExtraServiceRepository(HospitalityPRO_DbContext dbContext)
+        public ExtraServiceRepository(HospitalityPRO_DbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
+        }
+
+    public ExtraService GetExtraService(int id)
+        {
+            return GetById(id);
         }
 
         public IEnumerable<ExtraService> GetAllExtraServices()
         {
-            return _dbContext.ExtraServices.ToList();
-        }
-
-        public ExtraService GetExtraService(int id)
-        {
-            return _dbContext.ExtraServices.Find(id);
+            return GetAll();
         }
 
         public ExtraService AddExtraService(ExtraService request)
         {
-            _dbContext.ExtraServices.Add(request);
-            _dbContext.SaveChanges();
+            Add(request);
+            PersistChangesToTrackedEntities();
             return request;
         }
 
         public ExtraService UpdateExtraService(ExtraService request)
         {
-            _dbContext.SaveChanges();
+            Update(request);
+            PersistChangesToTrackedEntities();
             return request;
         }
 
         public void DeleteExtraService(int id)
         {
-            var extraService = _dbContext.ExtraServices.Find(id);
-            if (extraService != null)
-            {
-                _dbContext.ExtraServices.Remove(extraService);
-                _dbContext.SaveChanges();
-            }
+            Remove(id);
+            PersistChangesToTrackedEntities();
         }
     }
-}
+ }
+
    
