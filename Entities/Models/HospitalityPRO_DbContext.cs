@@ -288,6 +288,9 @@ namespace HumanResourceProject.Models
                 entity.Property(e => e.Type)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasIndex(e => e.Type) 
+                    .IsUnique();
             });
 
             OnModelCreatingPartial(modelBuilder);

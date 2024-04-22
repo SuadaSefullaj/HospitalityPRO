@@ -19,6 +19,7 @@ namespace Domain.DI
 
             For<IUserDomain>().Use<UserDomain>();
             For<IClientService>().Use<ClientService>();
+            For<IRoomTypeService>().Use<RoomTypeService>();
 
             AddRepositoryRegistries();
             AddHttpContextRegistries();

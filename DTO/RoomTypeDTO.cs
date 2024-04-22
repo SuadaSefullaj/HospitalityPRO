@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DTO
 {
-    internal class RoomTypeDTO
+    public class RoomTypeDTO
     {
         public string Type { get; set; } = null!;
         public double Price { get; set; }

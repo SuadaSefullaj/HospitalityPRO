@@ -18,6 +18,7 @@ namespace Domain.Mappings
         {
            CreateMap<Client, ClientLoginDTO>().ReverseMap();
            CreateMap<Client, ClientRegistrationDTO>().ReverseMap();
+            CreateMap<RoomType, RoomTypeDTO>().ReverseMap();
 
         }
         #endregion

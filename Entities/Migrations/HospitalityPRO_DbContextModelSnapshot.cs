@@ -401,6 +401,9 @@ namespace Entities.Migrations
                     b.HasKey("TypeId")
                         .HasName("PK__Room_Typ__FE90DD9EB4C0A9EC");
 
+                    b.HasIndex("Type")
+                        .IsUnique();
+
                     b.ToTable("Room_Type", (string)null);
                 });
 
