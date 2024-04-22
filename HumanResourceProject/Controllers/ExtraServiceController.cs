@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Contracts;
 using DTO;
 using HumanResourceProject.Models;
 using Microsoft.AspNetCore.Http;
@@ -10,79 +11,51 @@ namespace HumanResourceProject.Controllers
     [ApiController]
     public class ExtraServiceController : ControllerBase
     {
-        private readonly HospitalityPRO_DbContext _context;
-        private readonly IMapper _mapper;
+        private readonly IExtraServiceDomain _extraServiceDomain;
 
-        public ExtraServiceController(HospitalityPRO_DbContext context, IMapper mapper)
+        public ExtraServiceController(IExtraServiceDomain extraServiceDomain)
         {
-            _context = context;
-            _mapper = mapper;
+            _extraServiceDomain = extraServiceDomain;
         }
 
         [HttpGet("getAllExtraService")]
         public ActionResult<IEnumerable<ExtraServiceDTO>> GetExtraServices()
         {
-            var extraServices = _context.ExtraServices.ToList();
-             return _mapper.Map<List<ExtraServiceDTO>>(extraServices);
-         
+            return Ok(_extraServiceDomain.GetAllExtraServices());
         }
 
         [HttpGet("{id}")]
         public ActionResult<ExtraServiceDTO> GetExtraService(int id)
         {
-            var extraService = _context.ExtraServices.Find(id);
-
+            var extraService = _extraServiceDomain.GetExtraService(id);
             if (extraService == null)
-            {
                 return NotFound();
-            }
-
-            return _mapper.Map<ExtraServiceDTO>(extraService);
+            return extraService;
         }
 
         [HttpPost("addExtraService")]
-        public ActionResult<ExtraService> AddExtraService(ExtraServiceDTO request)
+        public ActionResult<ExtraServiceDTO> AddExtraService(ExtraServiceDTO request)
         {
-            var extraService = _mapper.Map<ExtraService>(request);
-
-            _context.ExtraServices.Add(extraService);
-            _context.SaveChanges();
-
-            return Ok(request);
+            var extraService = _extraServiceDomain.AddExtraService(request);
+            return request;
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateExtraService(int id, ExtraServiceDTO request)
+        public ActionResult<ExtraServiceDTO> UpdateExtraService(int id, ExtraServiceDTO request)
         {
-            var extraService = _context.ExtraServices.Find(id);
-
-            if (extraService == null)
-            {
+            var updatedExtraService = _extraServiceDomain.UpdateExtraService(id, request);
+            if (updatedExtraService == null)
                 return NotFound();
-            }
 
-            _mapper.Map(request, extraService);
-
-            _context.SaveChanges();
-
-            return Ok(request);
+            return request;
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<ExtraServiceDTO> DeleteExtraService(int id)
+        public IActionResult DeleteExtraService(int id)
         {
-            var extraService = _context.ExtraServices.Find(id);
-
-            if (extraService == null)
-            {
-                return NotFound();
-            }
-
-            _context.ExtraServices.Remove(extraService);
-            _context.SaveChanges();
-
+            _extraServiceDomain.DeleteExtraService(id);
             return Ok("This Extra Service has been deleted!");
         }
+
     }
 }
-    
