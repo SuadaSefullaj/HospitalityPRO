@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DTO;
+using HumanResourceProject.Models;
 
 namespace DAL.Contracts
 {
-    public interface IRoomTypeRepository
+    public interface IRoomTypeRepository : IRepository<RoomType, int >
     {
         List<RoomTypeDTO> GetAllRoomTypes();
         RoomTypeDTO GetRoomTypeById(int TypeId);
