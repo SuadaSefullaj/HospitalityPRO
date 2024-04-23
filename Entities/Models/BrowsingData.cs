@@ -9,6 +9,6 @@ namespace HumanResourceProject.Models
 
         public string ActionType { get; set; } = null!;
         public DateTime Time { get; set; }
-        public string ReservationDetails { get; set; } = null!;
+        public string reservationDetails { get; set; } = null!;
     }
 }

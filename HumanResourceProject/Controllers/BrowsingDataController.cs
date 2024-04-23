@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using HumanResourceProject.Models;
-using DAL.Browsing_Data;
 using DTO;
-using System.Collections.Generic; 
+using System.Collections.Generic;
+using DAL.Contacts;
 
 namespace HumanResourceProject.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class BrowsingDataController : ControllerBase 
 	{
@@ -42,7 +42,65 @@ namespace HumanResourceProject.Controllers
 
 			return Ok(data1); 
 		}
+		 [HttpPost]
+[ProducesResponseType(201)]
+[ProducesResponseType(400)]
+[ProducesResponseType(422)]
+public IActionResult CreateData([FromBody] BrowsingDataDto dataCreateDto)
+{
+    if (dataCreateDto == null)
+    {
+        return BadRequest("Invalid data provided.");
+    }
 
+    
+    Guid newGuid = Guid.NewGuid();
+    int browsingId = newGuid.GetHashCode();
+	if(browsingId < 0)
+			{
+				browsingId = browsingId * -1;
+			}
+   
+    var browsingData = new BrowsingData
+    {
+        BrowsingId = browsingId,
+        ActionType = dataCreateDto.ActionType,
+        Time = DateTime.Now,
+		reservationDetails = dataCreateDto.ReservationDetails
+	};
+
+    
+    if (!_browsingDataReopository.CreateData(browsingData))
+    {
+        return StatusCode(500, "Failed to save browsing data.");
+    }
+
+    return Ok("Data u krijua");
+	}
+
+		[HttpDelete("{dataId}")]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(404)]
+		public IActionResult DeleteOwner(int dataId)
+		{
+			if (!_browsingDataReopository.DataExists(dataId))
+			{
+				return NotFound();
+			}
+
+			var dataToDelete = _browsingDataReopository.GetData(dataId);
+
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
+			if (!_browsingDataReopository.DeleteData(dataToDelete))
+			{
+				ModelState.AddModelError("", "Something went wrong deleting owner");
+			}
+
+			return Ok("Data u fshi");
+		}
 
 	}
 }

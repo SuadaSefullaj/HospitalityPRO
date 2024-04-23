@@ -1,4 +1,5 @@
-using DAL.Browsing_Data;
+using DAL.Concrete;
+using DAL.Contacts;
 using DI;
 using Domain.Mappings;
 using Entities.Models;
@@ -21,6 +22,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IBrowsingDataRepository, BrowsingDataRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();  
 builder.Services.AddDbContext<HospitalityPRO_DbContext>();
 builder.Services.AddAutoMapper(typeof(GeneralProfile));
 

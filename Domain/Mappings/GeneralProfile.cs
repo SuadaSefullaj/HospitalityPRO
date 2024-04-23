@@ -16,7 +16,9 @@ namespace Domain.Mappings
         #region User
         public GeneralProfile()
         {
-			CreateMap<BrowsingData, BrowsingDataDto>();
+			CreateMap<BrowsingData, BrowsingDataDto>().ReverseMap();
+            CreateMap<Notification, NottificationDto>().ReverseMap();
+
 		}
 
         #endregion

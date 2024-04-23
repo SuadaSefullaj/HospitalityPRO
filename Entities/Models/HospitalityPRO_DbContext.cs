@@ -51,10 +51,10 @@ namespace HumanResourceProject.Models
                     .IsUnicode(false)
                     .HasColumnName("Action_type");
 
-                entity.Property(e => e.ReservationDetails)
+                entity.Property(e => e.reservationDetails)
                     .HasMaxLength(225)
                     .IsUnicode(false)
-                    .HasColumnName("Reservation_Details");
+                    .HasColumnName("reservationDetails");
 
                 entity.Property(e => e.Time).HasColumnType("datetime");
             });
