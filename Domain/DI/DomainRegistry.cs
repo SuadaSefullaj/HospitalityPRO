@@ -18,6 +18,9 @@ namespace Domain.DI
             IncludeRegistry<DomainUnitOfWorkRegistry>();
 
             For<IUserDomain>().Use<UserDomain>();
+            For<IClientService>().Use<ClientService>();
+            For<IRoomTypeService>().Use<RoomTypeService>();
+            For<IExtraServiceDomain>().Use<ExtraServiceDomain>();
 
             AddRepositoryRegistries();
             AddHttpContextRegistries();

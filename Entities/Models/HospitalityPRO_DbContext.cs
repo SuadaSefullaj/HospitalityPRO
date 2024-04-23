@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -16,7 +17,7 @@ namespace HumanResourceProject.Models
         {
         }
 
-        public virtual DbSet<BrowsingData> BrowsingData { get; set; } = null!;
+        public virtual DbSet<BrowsingDatum> BrowsingData { get; set; } = null!;
         public virtual DbSet<Client> Clients { get; set; } = null!;
         public virtual DbSet<ExtraService> ExtraServices { get; set; } = null!;
         public virtual DbSet<Hotel> Hotels { get; set; } = null!;
@@ -25,22 +26,22 @@ namespace HumanResourceProject.Models
         public virtual DbSet<ReservationService> ReservationServices { get; set; } = null!;
         public virtual DbSet<Room> Rooms { get; set; } = null!;
         public virtual DbSet<RoomType> RoomTypes { get; set; } = null!;
+        public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=FLORJANPLEPAJ\\SQLEXPRESS;Database=HospitalityPRO_Db;Trusted_Connection=true;");
+                optionsBuilder.UseSqlServer("Server=localhost\\MSSQLSERVER01;Database=HospitalityPRO_Db;Trusted_Connection=true;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BrowsingData>(entity =>
+            modelBuilder.Entity<BrowsingDatum>(entity =>
             {
                 entity.HasKey(e => e.BrowsingId)
-                    .HasName("PK__Browsing__6FAAE202C5EF0670");
+                    .HasName("PK__Browsing__6FAAE202C85348B8");
 
                 entity.ToTable("Browsing_Data");
 
@@ -51,10 +52,10 @@ namespace HumanResourceProject.Models
                     .IsUnicode(false)
                     .HasColumnName("Action_type");
 
-                entity.Property(e => e.reservationDetails)
+                entity.Property(e => e.ReservationDetails)
                     .HasMaxLength(225)
                     .IsUnicode(false)
-                    .HasColumnName("reservationDetails");
+                    .HasColumnName("Reservation_Details");
 
                 entity.Property(e => e.Time).HasColumnType("datetime");
             });
@@ -63,7 +64,7 @@ namespace HumanResourceProject.Models
             {
                 entity.ToTable("Client");
 
-                entity.HasIndex(e => e.Email, "UQ__Client__A9D10534FBA84214")
+                entity.HasIndex(e => e.Email, "UQ__Client__A9D10534F44FEE9E")
                     .IsUnique();
 
                 entity.Property(e => e.ClientId).HasColumnName("Client_Id");
@@ -75,10 +76,6 @@ namespace HumanResourceProject.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Name)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Password)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -99,14 +96,14 @@ namespace HumanResourceProject.Models
             modelBuilder.Entity<ExtraService>(entity =>
             {
                 entity.HasKey(e => e.ServicesId)
-                    .HasName("PK__Extra_Se__A74BF874F977CC8F");
+                    .HasName("PK__Extra_Se__A74BF874192B162C");
 
                 entity.ToTable("Extra_Services");
 
                 entity.Property(e => e.ServicesId).HasColumnName("Services_Id");
 
                 entity.Property(e => e.Description)
-                    .HasMaxLength(225)
+                    .HasMaxLength(500)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Type)
@@ -166,19 +163,19 @@ namespace HumanResourceProject.Models
                     .WithMany(p => p.NotificationReceiverClients)
                     .HasForeignKey(d => d.ReceiverClientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Notificat__Recei__4D94879B");
+                    .HasConstraintName("FK__Notificat__Recei__3A81B327");
 
                 entity.HasOne(d => d.Reservation)
                     .WithMany(p => p.Notifications)
                     .HasForeignKey(d => d.ReservationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Notificat__Reser__4BAC3F29");
+                    .HasConstraintName("FK__Notificat__Reser__38996AB5");
 
                 entity.HasOne(d => d.SenderClient)
                     .WithMany(p => p.NotificationSenderClients)
                     .HasForeignKey(d => d.SenderClientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Notificat__Sende__4CA06362");
+                    .HasConstraintName("FK__Notificat__Sende__398D8EEE");
             });
 
             modelBuilder.Entity<Reservation>(entity =>
@@ -210,19 +207,19 @@ namespace HumanResourceProject.Models
                     .WithMany(p => p.Reservations)
                     .HasForeignKey(d => d.ClientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Reservati__Clien__4222D4EF");
+                    .HasConstraintName("FK__Reservati__Clien__2F10007B");
 
                 entity.HasOne(d => d.RoomNumberNavigation)
                     .WithMany(p => p.Reservations)
                     .HasForeignKey(d => d.RoomNumber)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Reservati__Room___4316F928");
+                    .HasConstraintName("FK__Reservati__Room___300424B4");
             });
 
             modelBuilder.Entity<ReservationService>(entity =>
             {
                 entity.HasKey(e => e.ReservationServicesId)
-                    .HasName("PK__Reservat__89ECE0537A6BD866");
+                    .HasName("PK__Reservat__89ECE053C95D6CD4");
 
                 entity.ToTable("Reservation_Services");
 
@@ -236,19 +233,19 @@ namespace HumanResourceProject.Models
                     .WithMany(p => p.ReservationServices)
                     .HasForeignKey(d => d.ReservationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Reservati__Reser__47DBAE45");
+                    .HasConstraintName("FK__Reservati__Reser__34C8D9D1");
 
                 entity.HasOne(d => d.Services)
                     .WithMany(p => p.ReservationServices)
                     .HasForeignKey(d => d.ServicesId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Reservati__Servi__48CFD27E");
+                    .HasConstraintName("FK__Reservati__Servi__35BCFE0A");
             });
 
             modelBuilder.Entity<Room>(entity =>
             {
                 entity.HasKey(e => e.RoomNumber)
-                    .HasName("PK__Room__353A906EC96D3476");
+                    .HasName("PK__Room__353A906EDA5F5670");
 
                 entity.ToTable("Room");
 
@@ -268,19 +265,19 @@ namespace HumanResourceProject.Models
                     .WithMany(p => p.Rooms)
                     .HasForeignKey(d => d.HotelId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Room__Hotel_Id__3E52440B");
+                    .HasConstraintName("FK__Room__Hotel_Id__2B3F6F97");
 
                 entity.HasOne(d => d.Type)
                     .WithMany(p => p.Rooms)
                     .HasForeignKey(d => d.TypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Room__Type_Id__3F466844");
+                    .HasConstraintName("FK__Room__Type_Id__2C3393D0");
             });
 
             modelBuilder.Entity<RoomType>(entity =>
             {
                 entity.HasKey(e => e.TypeId)
-                    .HasName("PK__Room_Typ__FE90DD9E53B392CC");
+                    .HasName("PK__Room_Typ__FE90DD9EB4C0A9EC");
 
                 entity.ToTable("Room_Type");
 
@@ -289,8 +286,37 @@ namespace HumanResourceProject.Models
                 entity.Property(e => e.Type)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasIndex(e => e.Type)
+                    .IsUnique();
             });
 
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.HasKey(e => e.TokenId)
+                    .HasName("PK_RefreshTokens");
+
+                entity.ToTable("RefreshTokens");
+
+                entity.Property(e => e.TokenId).HasColumnName("TokenId");
+
+                entity.Property(e => e.Token)
+                    .IsRequired();
+
+                entity.Property(e => e.Created)
+                    .IsRequired();
+
+                entity.Property(e => e.Expires)
+                    .IsRequired();
+
+                // Configure relationship
+                entity.HasOne(rt => rt.Client)
+                      .WithMany(c => c.RefreshTokens)
+                      .HasForeignKey(rt => rt.ClientId)
+                      .IsRequired();
+            });
+
+            // Call the partial method for any additional model configurations
             OnModelCreatingPartial(modelBuilder);
         }
 

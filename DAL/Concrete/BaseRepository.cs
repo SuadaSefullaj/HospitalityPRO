@@ -12,6 +12,7 @@ namespace DAL.Concrete
     internal class BaseRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class
     {
         protected readonly DbContext db;
+
         protected DbSet<TEntity> context;
 
         public BaseRepository(DbContext dbContext)

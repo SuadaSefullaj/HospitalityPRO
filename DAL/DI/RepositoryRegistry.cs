@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using DAL.Concrete;
 using DAL.Contracts;
+using HumanResourceProject.Models;
 using Lamar;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.DI
 {
@@ -16,6 +18,9 @@ namespace DAL.DI
             IncludeRegistry<UnitOfWorkRegistry>();
 
             For<IUserRepository>().Use<UserRepository>();
+            For<IClientRepository>().Use<ClientRepository>();
+            For<IRoomTypeRepository>().Use<RoomTypeRepository>();
+            For<IExtraServiceRepository>().Use<ExtraServiceRepository>();
         }
 
 
