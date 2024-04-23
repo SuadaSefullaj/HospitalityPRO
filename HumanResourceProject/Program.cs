@@ -28,8 +28,11 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
-
+builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IBrowsingDataRepository, BrowsingDataRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();  
+builder.Services.AddDbContext<HospitalityPRO_DbContext>();
+builder.Services.AddAutoMapper(typeof(GeneralProfile));
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(options =>
 {

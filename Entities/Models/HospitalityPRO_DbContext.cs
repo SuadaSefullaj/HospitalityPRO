@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -28,12 +28,10 @@ namespace HumanResourceProject.Models
         public virtual DbSet<RoomType> RoomTypes { get; set; } = null!;
         public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=localhost\\MSSQLSERVER01;Database=HospitalityPRO_Db;Trusted_Connection=true;");
             }
         }
@@ -289,11 +287,10 @@ namespace HumanResourceProject.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasIndex(e => e.Type) 
+                entity.HasIndex(e => e.Type)
                     .IsUnique();
             });
 
-            OnModelCreatingPartial(modelBuilder);
             modelBuilder.Entity<RefreshToken>(entity =>
             {
                 entity.HasKey(e => e.TokenId)
@@ -318,8 +315,10 @@ namespace HumanResourceProject.Models
                       .HasForeignKey(rt => rt.ClientId)
                       .IsRequired();
             });
-        }
 
+            // Call the partial method for any additional model configurations
+            OnModelCreatingPartial(modelBuilder);
+        }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }

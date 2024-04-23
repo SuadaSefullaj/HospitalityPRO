@@ -1,4 +1,4 @@
-﻿using Entities.Models;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -12,13 +12,14 @@ namespace HumanResourceProject.Models
             NotificationReceiverClients = new HashSet<Notification>();
             NotificationSenderClients = new HashSet<Notification>();
             Reservations = new HashSet<Reservation>();
-            RefreshTokens = new HashSet<RefreshToken>();
+            RefreshTokens = new HashSet<RefreshToken>(); // Added for refresh tokens
         }
 
         public int ClientId { get; set; }
         public string Name { get; set; } = null!;
         public string Surname { get; set; } = null!;
         public string Email { get; set; } = null!;
+        public string Password { get; set; } = null!;
         public DateTime Birth { get; set; }
         public string PhoneNumber { get; set; } = null!;
         public string Role { get; set; } = "Client";
@@ -29,8 +30,6 @@ namespace HumanResourceProject.Models
 
         [JsonIgnore]
         public byte[] PasswordSalt { get; set; } = null!;
-
-
 
         public virtual ICollection<Notification> NotificationReceiverClients { get; set; }
         public virtual ICollection<Notification> NotificationSenderClients { get; set; }
