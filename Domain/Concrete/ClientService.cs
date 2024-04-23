@@ -59,10 +59,7 @@ namespace Domain.Concrete
             {
                 throw new Exception("Email is already registered.");
             }
-            if (request.Password.Length < 8)
-            {
-                throw new InvalidOperationException("Password must be at least 8 characters long.");
-            }
+           
             var admin = _mapper.Map<Client>(request);
             admin.Role = "Admin";
             _passwordService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
