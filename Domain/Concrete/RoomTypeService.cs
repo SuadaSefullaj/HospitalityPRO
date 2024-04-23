@@ -43,6 +43,7 @@ namespace Domain.Concrete
         public void UpdateRoomType(int TypeId, RoomTypeDTO request)
         {
             var roomType = _mapper.Map<RoomType>(request);
+            roomType.TypeId = TypeId;
             _roomTypeRepository.UpdateRoomType(roomType);
         }
 
