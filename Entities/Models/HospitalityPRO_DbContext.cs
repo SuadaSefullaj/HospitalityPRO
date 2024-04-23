@@ -105,7 +105,7 @@ namespace HumanResourceProject.Models
                 entity.Property(e => e.ServicesId).HasColumnName("Services_Id");
 
                 entity.Property(e => e.Description)
-                    .HasMaxLength(225)
+                    .HasMaxLength(500)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Type)

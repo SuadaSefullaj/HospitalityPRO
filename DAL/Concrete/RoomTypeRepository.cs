@@ -14,38 +14,35 @@ namespace DAL.Concrete
 {
     internal class RoomTypeRepository : BaseRepository<RoomType, int>, IRoomTypeRepository
     {
-        private readonly IMapper _mapper;
+
 
         public RoomTypeRepository(HospitalityPRO_DbContext dbContext, IMapper mapper) : base(dbContext)
         {
-            _mapper = mapper;
+      
         }
 
-        public List<RoomTypeDTO> GetAllRoomTypes()
+        public IEnumerable<RoomType> GetAllRoomTypes()
         {
-            var roomTypes = GetAll();
-            return _mapper.Map<List<RoomTypeDTO>>(roomTypes);
+            return GetAll();
         }
 
-        public RoomTypeDTO GetRoomTypeById(int TypeId)
+        public RoomType GetRoomTypeById(int TypeId)
         {
-            var roomType = GetById(TypeId);
-            return _mapper.Map<RoomTypeDTO>(roomType);
+            return GetById(TypeId);
         }
 
-        public void CreateRoomType(RoomTypeDTO roomTypeDto)
+        public RoomType CreateRoomType(RoomType request)
         {
-            var roomType = _mapper.Map<RoomType>(roomTypeDto);
-            Add(roomType);
+            Add(request);
             PersistChangesToTrackedEntities();
+            return request;
         }
 
-        public void UpdateRoomType(int TypeId, RoomTypeDTO roomTypeDto)
+        public RoomType UpdateRoomType(RoomType request)
         {
-            var roomType = GetById(TypeId);
-            _mapper.Map(roomTypeDto, roomType);
-            Update(roomType);
+            Update(request);
             PersistChangesToTrackedEntities();
+            return request;
         }
 
         public void DeleteRoomType(int TypeId)

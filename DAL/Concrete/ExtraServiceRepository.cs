@@ -14,7 +14,7 @@ namespace DAL.Concrete
         {
         }
 
-    public ExtraService GetExtraService(int id)
+        public ExtraService GetExtraService(int id)
         {
             return GetById(id);
         }
@@ -36,6 +36,8 @@ namespace DAL.Concrete
             Update(request);
             PersistChangesToTrackedEntities();
             return request;
+
+
         }
 
         public void DeleteExtraService(int id)
@@ -44,6 +46,6 @@ namespace DAL.Concrete
             PersistChangesToTrackedEntities();
         }
     }
- }
+}
 
-   
+

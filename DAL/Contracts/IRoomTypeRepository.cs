@@ -10,12 +10,11 @@ namespace DAL.Contracts
 {
     public interface IRoomTypeRepository : IRepository<RoomType, int >
     {
-        List<RoomTypeDTO> GetAllRoomTypes();
-        RoomTypeDTO GetRoomTypeById(int TypeId);
-        void CreateRoomType(RoomTypeDTO request);
-        void UpdateRoomType(int TypeId, RoomTypeDTO request);
+        IEnumerable<RoomType> GetAllRoomTypes();
+        RoomType GetRoomTypeById(int TypeId);
+        RoomType CreateRoomType(RoomType request);
+        RoomType UpdateRoomType(RoomType request);
         void DeleteRoomType(int TypeId);
-
 
     }
 }

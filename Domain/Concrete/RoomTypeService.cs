@@ -37,14 +37,15 @@ namespace Domain.Concrete
         public void CreateRoomType(RoomTypeDTO request)
         {
             var roomType = _mapper.Map<RoomType>(request);
-            _roomTypeRepository.CreateRoomType(request);
+            _roomTypeRepository.CreateRoomType(roomType);
         }
 
         public void UpdateRoomType(int TypeId, RoomTypeDTO request)
         {
             var roomType = _mapper.Map<RoomType>(request);
-            _roomTypeRepository.UpdateRoomType(TypeId, request);
+            _roomTypeRepository.UpdateRoomType(roomType);
         }
+
 
         public void DeleteRoomType(int TypeId)
         {
